@@ -31,7 +31,13 @@ function Header() {
             <Button
                 variant="contained"
                 onClick={handleSingUp}
-                sx={{backgroundColor: '#57A151'}}
+                sx={{
+                    backgroundColor: '#4CAF50',
+                    '&:hover': {
+                        backgroundColor: '#2e7d32',
+                        boxShadow: 6,
+                    },
+            }}
             >
                 Sign Up
             </Button>
@@ -39,6 +45,12 @@ function Header() {
                 variant="outlined" color="inherit"
                 onClick={handleSingUp}
                 startIcon={<PersonIcon/>}
+                sx={{
+                    '&:hover': {
+                        backgroundColor: '#2e7d32',
+                        boxShadow: 6,
+                    },
+                }}
             >
                 Log In
             </Button>
