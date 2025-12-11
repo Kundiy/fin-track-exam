@@ -9,6 +9,7 @@ export const TEXT = {
         SIGN_IN: "sign in",
         LOGIN: "log in",
         EXIT: "exit",
+        CREATE: "create",
     } as const,
 
     TITLES: {
@@ -23,11 +24,14 @@ export const TEXT = {
 
     FORMS: {
         SIGN_UP: "sign up",
-        NAME: 'name',
-        LASTNAME: 'lastname',
-        EMAIL: 'email',
-        PASSWORD: 'password',
-        REPEAT_PASSWORD: 'repeat password',
+        NAME: "name",
+        LASTNAME: "lastname",
+        EMAIL: "email",
+        PASSWORD: "password",
+        REPEAT_PASSWORD: "repeat password",
+        CATEGORY_FORM_TITLE: "create new category",
+        NEW_CATEGORY_INPUT_PLACEHOLDER: "new category",
+
     } as const,
 
 

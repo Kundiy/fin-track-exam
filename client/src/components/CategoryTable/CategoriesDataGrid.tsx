@@ -1,11 +1,11 @@
 import {DataGrid} from '@mui/x-data-grid';
 import {AccountCircle} from '@mui/icons-material';
 import {CustomFooter} from "./CustomFooter.tsx";
-import {columns} from "./userColumns.tsx";
+import {columns} from "./CategoriesColumns.tsx";
 import './CategoriesDataGrid.scss';
 import {TEXT} from "../../constants/textConstants.ts";
 
-// Приклад даних
+// Example of data
 const rows = [
     {id: 1, name: 'Іван Петров', expenses: 1500, icon: <AccountCircle fontSize="small"/>},
     {id: 2, name: 'Марія Сидорова', expenses: 320, icon: <AccountCircle fontSize="small"/>},

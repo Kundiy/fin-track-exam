@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button';
 import {AppBar, Avatar, Box, IconButton, Menu, MenuItem, Toolbar, Typography} from "@mui/material";
 import {Person as PersonIcon, AccountBalanceWallet} from '@mui/icons-material';
-import './Header.scss';
 import {useHeaderLogic} from "../../hooks/useHeaderLogic.ts";
 import {TEXT} from "../../constants/textConstants.ts";
 

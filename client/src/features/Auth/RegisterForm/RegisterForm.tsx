@@ -3,6 +3,7 @@ import {useState} from "react";
 import {useAppDispatch} from "../../../store/hooks";
 import {loginSuccessMock} from "../../../store/user/userSlice.ts";
 import {TEXT} from "../../../constants/textConstants.ts";
+import * as React from "react";
 
 type RegisterFormProps = {
     onCloseModal: () => void;

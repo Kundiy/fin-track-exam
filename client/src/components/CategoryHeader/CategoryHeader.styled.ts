@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 export const StyledToggleButton = styled(ToggleButton)({
     borderRadius: '10px !important',
     border: '1px solid #E0E0E0',
-    textTransform: 'none',
+    textTransform: 'capitalize',
     fontWeight: 600,
     color: '#616161',
     padding: '6px 16px',

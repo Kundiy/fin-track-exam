@@ -15,7 +15,7 @@ export const CustomFooter = () => {
             justifyContent: 'flex-end',
             alignItems: 'center'
         }}>
-            <Typography variant="body2" sx={{fontWeight: 'bold'}}>
+            <Typography variant="body2">
                 {TEXT.PAGES_TEXTS.CATEGORIES_FOOTER} {rowCount}
             </Typography>
         </Box>
