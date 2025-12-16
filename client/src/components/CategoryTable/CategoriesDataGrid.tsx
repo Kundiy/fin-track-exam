@@ -1,43 +1,38 @@
 import {DataGrid} from '@mui/x-data-grid';
-import {AccountCircle} from '@mui/icons-material';
 import {CustomFooter} from "./CustomFooter.tsx";
-import {columns} from "./CategoriesColumns.tsx";
+import {createColumns} from "./CategoriesColumns.tsx";
 import './CategoriesDataGrid.scss';
-import {TEXT} from "../../constants/textConstants.ts";
-
-// Example of data
-const rows = [
-    {id: 1, name: 'Іван Петров', expenses: 1500, icon: <AccountCircle fontSize="small"/>},
-    {id: 2, name: 'Марія Сидорова', expenses: 320, icon: <AccountCircle fontSize="small"/>},
-    {id: 3, name: 'Оліфвіег Іваівваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 4, name: 'Осисмлег Іваніваіенко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 5, name: 'Овпалег Іваблроненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 6, name: 'Оуклег Іванршгшенко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 7, name: 'Ол657ег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 8, name: 'Окенлег Іванпаорпенко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 9, name: 'Окелег Івануненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 10, name: 'Олег Івангшненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 11, name: 'Оваплег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 12, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 13, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 14, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 15, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 16, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 17, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 18, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 19, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-    {id: 20, name: 'Олег Іваненко', expenses: 980, icon: <AccountCircle fontSize="small"/>},
-];
-
+import {useAppSelector} from "../../store/hooks.ts";
+import {AccountBalanceWallet, MonetizationOn} from '@mui/icons-material';
+import {EXPENSE_CATEGORY_ID} from "../../constants/categotyTypes.ts";
+import {useCategoryActions} from "../../hooks/useCategoryActions.ts";
 
 const CategoriesDataGrid = () => {
+    const {handleEditCategory} = useCategoryActions();
+    const tableColumns = createColumns(handleEditCategory);
+    const categories = useAppSelector(state => state.categories.categories);
+    const currentTypeId = useAppSelector(state => state.categories.currentType);
+
+    const dataRows = categories.map(category => ({
+        ...category,
+        icon: currentTypeId === EXPENSE_CATEGORY_ID
+            ? <AccountBalanceWallet fontSize="small"/>
+            : <MonetizationOn fontSize="small"/>
+    }));
+
+   /* const editCategory = () => {
+
+    }*/
+    console.log(dataRows);
     return (
         <div className="category-table-wrapper">
-            <h3>{TEXT.TITLES.EXPENSES_CATEGORIES}</h3>
             <DataGrid
-                rows={rows}
+                rows={dataRows}
                 rowHeight={40}
-                columns={columns}
+                columns={tableColumns}
+                localeText={{
+                    noRowsLabel: 'No Categories',
+                }}
                 slots={{
                     footer: CustomFooter,
                 }}

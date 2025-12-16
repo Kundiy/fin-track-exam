@@ -1,18 +1,27 @@
 import './App.scss'
 import Header from "../Header/Header.tsx";
 import Content from "../Content/Content.tsx";
-import {Provider} from "react-redux";
-import {store} from "../../store/store.ts";
 import AppModal from "../AppModal/AppModal.tsx";
+import {useEffect} from "react";
+import {useAppDispatch} from "../../store/hooks.ts";
+import {setAuthToken} from "../../store/user/userSlice.ts";
+import {getCategoryTypes} from "../../store/category/categorySlice.ts";
 
 function App() {
+    const dispatch = useAppDispatch();
+    const isAuth = sessionStorage.getItem('token');
+
+    useEffect(() => {
+        dispatch(setAuthToken());
+        dispatch(getCategoryTypes());
+    }, [dispatch, isAuth]);
 
     return (
-        <Provider store={store}>
+        <>
             <Header/>
             <AppModal/>
             <Content/>
-        </Provider>
+        </>
     )
 }
 

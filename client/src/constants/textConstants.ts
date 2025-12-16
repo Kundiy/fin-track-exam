@@ -5,7 +5,7 @@ export const TEXT = {
         ADD_TRANSACTION: "add transaction",
         NEW_CATEGORY: "+ create category",
         INCOME: "income",
-        EXPENSES: "expenses",
+        EXPENSE: "expense",
         SIGN_IN: "sign in",
         LOGIN: "log in",
         EXIT: "exit",
@@ -14,6 +14,7 @@ export const TEXT = {
 
     TITLES: {
         EXPENSES_CATEGORIES: "expenses categories",
+        INCOME_CATEGORIES: "income categories",
         CATEGORIES_PAGE: "categories",
         DASHBOARD_PAGE: "dashboard",
     } as const,
