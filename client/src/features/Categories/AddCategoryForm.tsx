@@ -16,8 +16,6 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({onCloseModal}: AddCate
         handleCancel
     } = useAddCategoryFormLogic({onCloseModal});
 
-    console.log(currentCategory);
-
     return (
         <Box
             component="form"
