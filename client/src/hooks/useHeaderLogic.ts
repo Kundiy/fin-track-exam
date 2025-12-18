@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../store/hooks.ts";
 import {openModal} from "../store/modal/modalSlice.ts";
 import type {RootState} from "../store/store.ts";
-import {logout} from "../store/user/userSlice.ts";
+import {getBalanceByUser, logout} from "../store/user/userSlice.ts";
+import type {Balance} from "../types";
 
 export type UseHeaderLogic = {
     auth: boolean;
     anchorEl: HTMLElement | null;
-    totalBalance: number;
+    balance: Balance;
     handleMenu: (event: React.MouseEvent<HTMLElement>) => void;
     handleCloseMenu: () => void;
     handleSignUpClick: () => void;
@@ -16,10 +17,13 @@ export type UseHeaderLogic = {
 
 export const useHeaderLogic = (): UseHeaderLogic => {
     const auth = useAppSelector((state: RootState) => state.user.isAuthenticated);
+    const balance = useAppSelector((state: RootState) => state.user.balance);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const dispatch = useAppDispatch();
 
-    const totalBalance = 12500;
+    useEffect(() => {
+        dispatch(getBalanceByUser());
+    }, [dispatch]);
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
@@ -44,7 +48,7 @@ export const useHeaderLogic = (): UseHeaderLogic => {
     return {
         auth,
         anchorEl,
-        totalBalance,
+        balance,
         handleMenu,
         handleCloseMenu,
         handleSignUpClick,

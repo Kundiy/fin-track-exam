@@ -5,12 +5,21 @@ import type {RegisterData, ResponseData, UserState} from "../../types";
 const initialState: UserState = {
     isAuthenticated: false,
     user: null,
+    balance: {
+        amount: '0.00'
+    },
     error: undefined,
 };
 
 const API_URL = import.meta.env.VITE_API_KEY_OPEN;
+const API_URL_BALANCE = import.meta.env.VITE_API_KEY;
 const REGISTER_URL = `${API_URL}/register`;
-export const client = axios.create();
+const BALANCE_URL = `${API_URL_BALANCE}/balance`;
+export const client = axios.create({ //Todo: check if header is ok for auth
+    headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+    }
+});
 
 export const registerNewUser = createAsyncThunk<ResponseData, RegisterData, { rejectValue: string }>(
     'user/registerNewUser',
@@ -29,6 +38,19 @@ export const registerNewUser = createAsyncThunk<ResponseData, RegisterData, { re
             return rejectWithValue('Network error');
         }
     })
+
+export const getBalanceByUser = createAsyncThunk(
+    'user/getBalance',
+    async (_, {rejectWithValue}) => {
+        try {
+            const {data} = await client.get(BALANCE_URL);
+            return data;
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue('Network error');
+        }
+    }
+)
 
 export const userSlice = createSlice({
     name: 'user',
@@ -67,9 +89,20 @@ export const userSlice = createSlice({
             .addCase(registerNewUser.rejected, (state, action) => {
                 state.error = action.payload;
             });
+
+        builder
+            .addCase(getBalanceByUser.fulfilled, (state, action) => {
+                state.balance = action.payload;
+                state.error = '';
+            })
+            .addCase(getBalanceByUser.rejected, (state, action) => {
+                state.error = action.payload as string;
+            });
     }
 
 });
+
+
 
 export const {loginSuccessMock, logout, clearRegistrationError, setAuthToken} = userSlice.actions;
 
