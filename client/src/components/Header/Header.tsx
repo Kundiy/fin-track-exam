@@ -8,7 +8,7 @@ function Header() {
     const {
         auth,
         anchorEl,
-        totalBalance,
+        balance,
         handleMenu,
         handleCloseMenu,
         handleSignUpClick,
@@ -27,7 +27,7 @@ function Header() {
                         backgroundColor: '#2e7d32',
                         boxShadow: 6,
                     },
-            }}
+                }}
             >
                 {TEXT.BUTTONS.SIGN_IN}
             </Button>
@@ -117,9 +117,11 @@ function Header() {
                                     marginTop: 0.3,
                                     marginLeft: '80px',
                                     color: '#424242'
-                            }}>
+                                }}>
                                 <span>{'Total Balance: '}</span>
-                                ${totalBalance.toLocaleString()}
+                                <span style={{color: Number(balance.amount) >= 0 ? 'green' : 'red'}}>
+                                    ${Number(balance.amount).toFixed(2)}
+                                </span>
                             </Typography>
                         )}
                     </Box>

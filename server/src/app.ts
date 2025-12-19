@@ -14,7 +14,7 @@ import {
     appendSimpleCategory, deleteCategoryById,
     getCategoriesByCategoryType,
     getCategoryById,
-    getCategoryTypes, updateCategoryById
+    getCategoryTypes, selectBalanceByUserId, updateCategoryById
 } from "./controllers/categories-controller";
 
 const app = express();
@@ -69,6 +69,10 @@ closeRouter.put(`${API_V1.CLOSE.PUT.CATEGORIES}/:id`, authenticateJWT, (request:
 
 closeRouter.delete(`${API_V1.CLOSE.DELETE.CATEGORIES}/:id`, authenticateJWT, (request: Request, response: Response) => {
     return deleteCategoryById(request, response);
+});
+
+closeRouter.get(`${API_V1.CLOSE.GET.BALANCE}`, authenticateJWT, (request: Request, response: Response) => {
+    return selectBalanceByUserId(request, response);
 });
 
 const routes = listEndpoints(app);

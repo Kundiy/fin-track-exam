@@ -28,10 +28,11 @@ export const appendSimpleCategory = async (request: Request, response: Response)
 export const getCategoriesByCategoryType = async (request: Request, response: Response) => {
     try {
         const {userId} = (request as any).user;
-        const {categoryTypeId} = request.query;
+        const {categoryTypeId, balance} = request.query;
         const values = [userId, categoryTypeId];
-        const result = await db.query(QUERIES.SELECT_CATEGORY_BY_CATEGORY_TYPE, values);
-        return response.status(200).json(result.rows);
+        const dbQuery = !!balance ? QUERIES.SELECT_CATEGORY_BY_CATEGORY_TYPE_WITH_BALANCE : QUERIES.SELECT_CATEGORY_BY_CATEGORY_TYPE;
+        const result = await db.query(dbQuery, values);
+        return response.status(200).json(!!balance ? result.rows[0] : result.rows);
     }
     catch (error) {
         return response.status(500).json({message: error.message});
@@ -72,6 +73,18 @@ export const deleteCategoryById = async (request: Request, response: Response) =
         const values = [id, userId];
         const result = await db.query(QUERIES.DELETE_CATEGORY_BY_ID, values);
         return response.status(200).json(result.rows.length > 0 ? result.rows[0] : {});
+    }
+    catch (error) {
+        return response.status(500).json({message: error.message});
+    }
+}
+
+export const selectBalanceByUserId = async (request: Request, response: Response) => {
+    try {
+        const {userId} = (request as any).user;
+        const values = [userId];
+        const result = await db.query(QUERIES.SELECT_BALANCE_BY_USER_ID, values);
+        return response.status(200).json(result.rows.length > 0 ? result.rows[0] : {amount: 0});
     }
     catch (error) {
         return response.status(500).json({message: error.message});

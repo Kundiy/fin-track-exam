@@ -16,6 +16,7 @@ export const API_V1 = Object.freeze({
         GET: {
             CATEGORIES: `/categories`,
             CATEGORY_TYPES: `/category-types`,
+            BALANCE: `/balance`,
         },
         POST: {
             CATEGORIES: `/categories`,

@@ -21,6 +21,8 @@ export const TEXT = {
 
     PAGES_TEXTS: {
         CATEGORIES_FOOTER: "categories amount:",
+        CATEGORY_EXPENSES_CHART_TITLE: "expenses per category",
+        CATEGORY_INCOME_CHART_TITLE: "income per category",
     } as const,
 
     FORMS: {

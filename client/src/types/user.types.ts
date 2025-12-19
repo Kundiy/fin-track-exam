@@ -27,3 +27,9 @@ export type UserState = {
     user: ResponseUserData | null;
     error?: string;
 }
+
+export type Balance = {
+    amount: string;
+    expenses: string,
+    income: string,
+}

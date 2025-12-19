@@ -22,6 +22,7 @@ export type RequestDate = {
   categoryTypeId: CategoryType;
 }
 
+
 export type RequestUpdate = RequestDate & { id: string };
 
 export type ResponseDate = {

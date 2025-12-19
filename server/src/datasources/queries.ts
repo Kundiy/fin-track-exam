@@ -28,6 +28,11 @@ export const QUERIES = Object.freeze({
                             WHERE id = $1 and user_id = $2
                             RETURNING *
                             `,
+    SELECT_BALANCE_BY_USER_ID: `select (sum(tri.amount)::numeric(24, 8) - sum(tro.amount)::numeric(24, 8)) as amount
+                                from categories c
+                                         left outer join transactions tri on tri.category_id = c.id and c.category_type_id = '00000001-0000-0000-0000-000000000001'
+                                         left outer join transactions tro on tro.category_id = c.id and c.category_type_id = '00000001-0000-0000-0000-000000000002'
+                                where c.user_id = $1`,
     SELECT_CATEGORY_BY_CATEGORY_TYPE: `select c.id, 
                                               c.name, 
                                               sum(COALESCE(t.amount, 0)) as amount
@@ -35,6 +40,12 @@ export const QUERIES = Object.freeze({
                                                 left outer join transactions t on c.id = t.category_id
                                        where c.user_id = $1 and c.category_type_id = $2
                                        group by c.id, c.name
+    `,
+    SELECT_CATEGORY_BY_CATEGORY_TYPE_WITH_BALANCE: `select  
+                                              sum(COALESCE(t.amount, 0)) as amount
+                                       from categories c
+                                                left outer join transactions t on c.id = t.category_id
+                                       where c.user_id = $1 and c.category_type_id = $2
     `,
     APPEND_SIMPLE_CATEGORY: `with new_category as (
                                 INSERT INTO categories (user_id, category_type_id, name) 
