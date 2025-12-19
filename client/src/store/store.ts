@@ -4,6 +4,7 @@ import userReducer from "./user/userSlice";
 import categoriesReducer from "./category/categorySlice.ts";
 import dialogReducer from "./confirmationDialog/confirmationDialogSlice.ts";
 import balanceReducer from "./balance/balanceSlice.ts";
+import transactionsReducer from "./transactions/transactionsSlice.ts";
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         user: userReducer,
         balance: balanceReducer,
         categories: categoriesReducer,
+        transactions: transactionsReducer,
     },
 });
 

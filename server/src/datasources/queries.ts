@@ -33,6 +33,19 @@ export const QUERIES = Object.freeze({
                                          left outer join transactions tri on tri.category_id = c.id and c.category_type_id = '00000001-0000-0000-0000-000000000001'
                                          left outer join transactions tro on tro.category_id = c.id and c.category_type_id = '00000001-0000-0000-0000-000000000002'
                                 where c.user_id = $1`,
+    SELECT_TRANSACTIONS_BY_USER_ID: `select
+                                         t.id,
+                                         c.category_type_id,
+                                         c.name,
+                                         t."when",
+                                         t.description,
+                                         t.amount
+                                     from categories c
+                                              inner join transactions t on t.category_id = c.id
+                                     where
+                                         c.user_id = $1
+                                `,
+
     SELECT_CATEGORY_BY_CATEGORY_TYPE: `select c.id, 
                                               c.name, 
                                               sum(COALESCE(t.amount, 0)) as amount

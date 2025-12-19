@@ -17,6 +17,7 @@ export const TEXT = {
         INCOME_CATEGORIES: "income categories",
         CATEGORIES_PAGE: "categories",
         DASHBOARD_PAGE: "dashboard",
+        TRANSACTIONS_PAGE: "transactions",
     } as const,
 
     PAGES_TEXTS: {
