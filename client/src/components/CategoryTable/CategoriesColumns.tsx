@@ -1,7 +1,9 @@
 import {Box, Stack, Typography} from "@mui/material";
-import {Delete, Edit, Euro} from "@mui/icons-material";
+import {Delete, Edit} from "@mui/icons-material";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import {openDeleteDialog} from "../../store/confirmationDialog/confirmationDialogSlice.ts";
 
-export const columns = [
+export const createColumns = (onEdit: (id: string) => void, dispatch: any) => [
     {
         field: 'name',
         headerName: 'Name',
@@ -15,16 +17,17 @@ export const columns = [
         ),
     },
     {
-        field: 'expenses',
-        headerName: 'Expenses',
+        field: 'amount',
+        headerName: 'Turnover',
         width: 150,
         sortable: true,
-        renderCell: (params: any) => (
-            <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5}}>
-                <Euro fontSize="inherit" sx={{color: 'text.secondary'}}/>
-                {params.value}
-            </Box>
-        ),
+        renderCell: (params: any) => {
+            const value = Number(params.value || 0).toFixed(2);
+            return (<Box sx={{display: 'flex', alignItems: 'center', gap: 0.5}}>
+                <AttachMoneyIcon fontSize="inherit" sx={{color: 'text.secondary'}}/>
+                {value}
+            </Box>)
+        },
     },
     {
         field: 'action',
@@ -42,11 +45,15 @@ export const columns = [
                     <Edit
                         color="primary"
                         style={{cursor: 'pointer'}}
-                        onClick={() => console.log('Редагувати рядок:', params.row.id)}
+                        onClick={() => onEdit(params.row.id)}
                     />
                     <Delete
                         sx={{color: 'red', cursor: 'pointer'}}
-                        onClick={() => console.log('Видалити рядок:', params.row.id)}
+                        onClick={() => dispatch(openDeleteDialog({
+                            id: params.row.id,
+                            title: "Delete category?",
+                            description: `Are you sure you want to delete "${params.row.name}"?`
+                        }))}
                     />
                 </Stack>
             </Box>

@@ -3,7 +3,7 @@ import {useMemo, useState} from "react";
 import * as React from "react";
 import * as Yup from "yup";
 import {clearRegistrationError, registerNewUser} from "../../store/user/userSlice.ts";
-import type {FormErrors, UserData} from "../../types/user.types.ts";
+import type {FormErrors, UserData} from "../../types";
 
 type UseRegisterFormProps = {
     onCloseModal: () => void;

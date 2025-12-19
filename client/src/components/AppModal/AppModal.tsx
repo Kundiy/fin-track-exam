@@ -9,6 +9,7 @@ import AddCategoryForm from "../../features/Categories/AddCategoryForm.tsx";
 const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
     'REGISTER': RegisterForm,
     'NEW_CATEGORY_FORM': AddCategoryForm,
+    'EDIT_CATEGORY': AddCategoryForm,
     // ...LOGIN etc
 };
 

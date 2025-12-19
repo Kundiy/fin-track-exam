@@ -14,7 +14,17 @@ export const API_V1 = Object.freeze({
     },
     CLOSE: {
         GET: {
-
+            CATEGORIES: `/categories`,
+            CATEGORY_TYPES: `/category-types`,
+        },
+        POST: {
+            CATEGORIES: `/categories`,
+        },
+        PUT: {
+            CATEGORIES: `/categories`,
+        },
+        DELETE: {
+            CATEGORIES: `/categories`,
         }
     }
 });

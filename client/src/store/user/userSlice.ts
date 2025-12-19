@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
-import type {RegisterData, ResponseData, UserState} from "../../types/user.types.ts";
+import type {RegisterData, ResponseData, UserState} from "../../types";
 
 const initialState: UserState = {
     isAuthenticated: false,
@@ -48,6 +48,13 @@ export const userSlice = createSlice({
         //If error in register form "email already exist
         clearRegistrationError: (state) => {
             state.error = '';
+        },
+
+        setAuthToken: (state) => {
+            const isAuth = sessionStorage.getItem('token');
+            if (!isAuth) return;
+            state.isAuthenticated = true;
+            state.user = {id: 'u1', email: 'test@example.com'};
         }
     },
     extraReducers: builder => {
@@ -64,6 +71,6 @@ export const userSlice = createSlice({
 
 });
 
-export const {loginSuccessMock, logout, clearRegistrationError} = userSlice.actions;
+export const {loginSuccessMock, logout, clearRegistrationError, setAuthToken} = userSlice.actions;
 
 export default userSlice.reducer;
