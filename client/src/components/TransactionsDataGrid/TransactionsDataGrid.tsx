@@ -49,7 +49,6 @@ function TransactionsDataGrid({transactions}: TransactionsProps) {
             renderCell: (params) => (
                 <Box sx={{fontWeight: 500}}>
                     {params.row.isHeader ? params.row.date?.split('T')[0] : params.row.name}
-                    {/*renderCell: (params) => params.row.when?.split('T')[0]*/}
                 </Box>
             )
         },
@@ -83,11 +82,9 @@ function TransactionsDataGrid({transactions}: TransactionsProps) {
             headerAlign: 'center',
             sortable: false,
             disableColumnMenu: true,
-            // renderCell: (params) => params.row.when?.split('T')[0]
             renderCell: (params) => (
                 <Box sx={{fontWeight: 500}}>
                     {params.row.isHeader ? '' : params.row.when?.split('T')[0]}
-                    {/*renderCell: (params) => params.row.when?.split('T')[0]*/}
                 </Box>
             )
         },
