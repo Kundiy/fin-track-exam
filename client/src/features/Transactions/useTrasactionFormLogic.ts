@@ -1,9 +1,13 @@
 import {useEffect, useState} from "react";
-import type {RequestAddTransaction, TransactionFormErrors} from "../../types";
+import type {Transaction, TransactionFormErrors} from "../../types";
 import * as React from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {getCategoriesByType} from "../../store/category/categorySlice.ts";
-import {createTransaction} from "../../store/transactions/transactionsSlice.ts";
+import {
+    clearCurrentTransaction,
+    createTransaction,
+    updateTransaction
+} from "../../store/transactions/transactionsSlice.ts";
 
 type TransactionFormProps = {
     onCloseModal: () => void;
@@ -12,38 +16,67 @@ type TransactionFormProps = {
 export const useTransactionFormLogic = ({onCloseModal}: TransactionFormProps) => {
     const dispatch = useAppDispatch();
     const [errors, setErrors] = useState<TransactionFormErrors>({});
-
     const categoryTypes = useAppSelector(state => state.categories.types);
     const categories = useAppSelector(state => state.categories.categories);
+    const currentTransaction = useAppSelector(state => state.transactions.currentTransaction);
     const [selectedCategoryType, setType] = useState('');
-    console.log('selectedCategoryType', selectedCategoryType);
-
-    useEffect(() => {
-        dispatch(getCategoriesByType(selectedCategoryType));
-    }, [dispatch, selectedCategoryType]);
-
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        setErrors({});
-
-        if (formState) {
-            dispatch(createTransaction(formState));
-            onCloseModal();
-        }
-    }
-
-    const handleCancel = () => {
-        console.log('cancel');
-        onCloseModal();
-    }
-
-    const [formState, setFormState] = useState<RequestAddTransaction>({
+    const [formState, setFormState] = useState<Transaction>({
+        id: '',
         amount: '',
         categoryTypeId: '',
         categoryId: '',
         when: '',
         description: '',
     });
+
+    useEffect(() => {
+        dispatch(getCategoriesByType(selectedCategoryType));
+    }, [dispatch, selectedCategoryType]);
+
+    useEffect(() => {
+        if(currentTransaction){
+            setFormState(prev => ({
+                ...prev,
+                id: currentTransaction.id,
+                categoryTypeId: currentTransaction.categoryTypeId ?? '',
+                categoryId: currentTransaction.categoryId ?? '',
+                when: currentTransaction.when ?? '',
+                description: currentTransaction.description ?? '',
+                amount: currentTransaction.amount ?? '',
+            }));
+            setType(currentTransaction.categoryTypeId ?? '');
+        } else {
+            setFormState(prev => ({
+                ...prev,
+                id: '',
+                categoryTypeId: '',
+                categoryId: '',
+                when: '',
+                description: '',
+                amount: '',
+            }));
+        }
+
+    }, [dispatch, currentTransaction]);
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        setErrors({});
+        const isEditing = !!currentTransaction;
+
+        if (isEditing) {
+            dispatch(updateTransaction(formState));
+            onCloseModal();
+        } else {
+            dispatch(createTransaction(formState));
+            onCloseModal();
+        }
+    }
+
+    const handleCancel = () => {
+        dispatch(clearCurrentTransaction());
+        onCloseModal();
+    }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
@@ -84,7 +117,7 @@ export const useTransactionFormLogic = ({onCloseModal}: TransactionFormProps) =>
         handleChange,
         handleTypeChange,
         handleCategoryChange,
-        errors,
+        currentTransaction,
         formState,
         categoryTypes,
         categories,

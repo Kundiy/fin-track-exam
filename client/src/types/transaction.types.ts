@@ -9,6 +9,7 @@ export type Transaction = {
 
 export type TransactionsInitialState = {
     transactions: Transaction[];
+    currentTransaction: Transaction | null;
     error?: string;
 };
 

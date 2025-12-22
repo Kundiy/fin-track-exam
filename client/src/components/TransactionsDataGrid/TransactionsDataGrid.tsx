@@ -9,6 +9,7 @@ import {Delete, Edit} from "@mui/icons-material";
 import './TransactionsDataGrid.scss';
 import {useAppDispatch} from "../../store/hooks.ts";
 import {openDeleteDialog} from "../../store/confirmationDialog/confirmationDialogSlice.ts";
+import {useTransactionActions} from "../../hooks/useTransactionsActions.ts";
 
 type TransactionsProps = {
     transactions: Transaction[]
@@ -20,24 +21,27 @@ const prepareRows = (transactions: Transaction[]) => {
     let lastDate = '';
 
     sorted.forEach((item) => {
-        if (item.when !== lastDate) {
+        const currentDate = item.when.includes('T') ? item.when.split('T')[0] : item.when;
+        if (currentDate !== lastDate) {
             result.push({
                 id: `header-${item.id}`,
                 isHeader: true,
-                date: item.when.split('T')[0],
+                date: currentDate,
                 amount: transactions
-                    .filter(t => t.when === item.when)
+                    .filter(t => (t.when.includes('T') ? t.when.split('T')[0] : t.when) === currentDate)
                     .reduce((sum, t) => sum + Number(t.amount), 0)
             });
-            lastDate = item.when.split('T')[0];
+            lastDate = currentDate;
         }
         result.push({...item, isHeader: false});
     });
     return result;
 }
 
+
 function TransactionsDataGrid({transactions}: TransactionsProps) {
     const dispatch = useAppDispatch();
+    const {handleEditTransaction} = useTransactionActions();
     const rows = useMemo(() => {
         return prepareRows(transactions);
     }, [transactions]);
@@ -53,7 +57,7 @@ function TransactionsDataGrid({transactions}: TransactionsProps) {
             disableColumnMenu: true,
             renderCell: (params) => (
                 <Box sx={{fontWeight: 500}}>
-                    {params.row.isHeader ? params.row.date?.split('T')[0] : params.row.name}
+                    {params.row.isHeader ? params.row.date : params.row.name}
                 </Box>
             )
         },
@@ -152,7 +156,8 @@ function TransactionsDataGrid({transactions}: TransactionsProps) {
                             <IconButton
                                 size="small"
                                 className="action-button edit-btn"
-                                onClick={() => console.log('Edit', params.row.id)}
+                                // onClick={() => console.log(params.row.id)}
+                                onClick={() => handleEditTransaction(params.row.id)}
                             >
                                 <Edit fontSize="small" />
                             </IconButton>
@@ -162,7 +167,6 @@ function TransactionsDataGrid({transactions}: TransactionsProps) {
                             <IconButton
                                 size="small"
                                 className="action-button delete-btn"
-                                // onClick={() => console.log('Delete', params.row.id)}
                                 onClick={() => dispatch(openDeleteDialog({
                                     id: params.row.id,
                                     actionType: 'DELETE_TRANSACTION',

@@ -12,6 +12,7 @@ const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
     'NEW_CATEGORY_FORM': AddCategoryForm,
     'EDIT_CATEGORY': AddCategoryForm,
     'ADD_TRANSACTION': TransactionForm,
+    'EDIT_TRANSACTION': TransactionForm,
     // ...LOGIN etc
 };
 

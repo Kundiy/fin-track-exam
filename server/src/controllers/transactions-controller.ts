@@ -66,3 +66,16 @@ export const deleteTransactionById = async (request: Request, response: Response
         return response.status(500).json({message: error.message});
     }
 }
+
+export const getTransactionById = async (request: Request, response: Response) => {
+    try {
+        const {userId} = (request as any).user;
+        const id = request.params.id;
+        const values = [id, userId];
+        const result = await db.query(QUERIES.SELECT_TRANSACTION_BY_ID, values);
+        return response.status(200).json(result.rows.length > 0 ? result.rows[0] : {});
+    }
+    catch (error) {
+        return response.status(500).json({message: error.message});
+    }
+}

@@ -71,18 +71,48 @@ export const QUERIES = Object.freeze({
                                     0::numeric(24, 8) as amount
                              from new_category as nc
                             `,
-    APPEND_TRANSACTION: `INSERT INTO transactions (user_id, category_id, "when", amount, description)
-                         VALUES ($1, $2, $3, $4, $5)
-                             RETURNING *, (SELECT name FROM categories WHERE id = $2) AS category_name;
-                            `,
-    UPDATE_TRANSACTION: `UPDATE transactions
-                         set "when"      = $3,
-                             amount      = $4,
-                             description = $5
-                         where id = $1 and user_id = $2
-                             RETURNING *
+    UPDATE_TRANSACTION: `
+                                WITH updated_row AS (
+                                UPDATE transactions
+                                SET "when"      = $3,
+                                    amount      = $4,
+                                    description = $5
+                                WHERE id = $1 AND user_id = $2
+                                    RETURNING *
+                            )
+                                SELECT
+                                    u.*,
+                                    c.name AS name,
+                                    c.category_type_id
+                                FROM updated_row u
+                                         JOIN categories c ON u.category_id = c.id
                             `,
     DELETE_TRANSACTION: `DELETE from transactions
                          where id = $1 and user_id = $2
                          RETURNING *`,
+    SELECT_TRANSACTION_BY_ID: `
+                        SELECT
+                            t.id,
+                            t.category_id,
+                            t."when",
+                            t.amount,
+                            t.description,
+                            c.category_type_id
+                        FROM transactions t
+                                 JOIN categories c ON t.category_id = c.id
+                        WHERE t.id = $1 AND t.user_id = $2
+                        `,
+    APPEND_TRANSACTION: `
+                        WITH inserted_row AS (
+                        INSERT INTO transactions (user_id, category_id, "when", amount, description)
+                        VALUES ($1, $2, $3, $4, $5)
+                            RETURNING *
+                            )
+                        SELECT
+                            i.*,
+                            c.name AS name,
+                            c.category_type_id AS category_type_id
+                        FROM inserted_row i
+                                 JOIN categories c ON i.category_id = c.id
+                    `,
 });

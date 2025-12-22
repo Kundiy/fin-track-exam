@@ -9,6 +9,7 @@ import axios from "axios";
 
 const initialState: TransactionsInitialState = {
     transactions: [],
+    currentTransaction: null,
     error: ''
 };
 
@@ -33,11 +34,40 @@ export const getTransactionsByUser = createAsyncThunk(
     }
 )
 
+export const getTransactionById = createAsyncThunk(
+    'transactions/getTransactionById',
+    async (transactionId: string, {rejectWithValue}) => {
+        try {
+            const {data} = await client.get(`${TRANSACTIONS_URL}/${transactionId}`);
+            return data;
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue('Network error');
+        }
+    }
+)
+
 export const createTransaction = createAsyncThunk<Transaction, RequestAddTransaction, { rejectValue: string }>(
     'transactions/createTransaction',
     async (newTransaction: RequestAddTransaction, {rejectWithValue}) => {
+        const {id, ...rest} = newTransaction;
+        console.log(rest);
         try {
-            const {data} = await client.post(TRANSACTIONS_URL, newTransaction);
+            const {data} = await client.post(TRANSACTIONS_URL, rest);
+            return data;
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue('Network error');
+        }
+    }
+)
+
+export const updateTransaction = createAsyncThunk<Transaction, Transaction, { rejectValue: string }>(
+    'transactions/updateTransaction',
+    async (updatedTransaction: Transaction, {rejectWithValue}) => {
+        try {
+            const transactionId = updatedTransaction.id;
+            const {data} = await client.put(`${TRANSACTIONS_URL}/${transactionId}`, updatedTransaction);
             return data;
         } catch (error) {
             console.log(error);
@@ -62,7 +92,11 @@ export const deleteTransaction = createAsyncThunk(
 export const transactionsSlice = createSlice({
     name: 'transactions',
     initialState,
-    reducers: {},
+    reducers: {
+        clearCurrentTransaction: (state) => {
+            state.currentTransaction = null;
+        }
+    },
     extraReducers: builder => {
         builder
             .addCase(getTransactionsByUser.fulfilled, (state, action) => {
@@ -84,17 +118,60 @@ export const transactionsSlice = createSlice({
 
         builder
             .addCase(createTransaction.fulfilled, (state, action) => {
-                const {when, category_name: name, ...rest} = action.payload;
+                const {when, category_type_id: categoryTypeId, ...rest} = action.payload;
                 const correctDate = moment(when).format('YYYY-MM-DD');
                 const finalTransaction = {
                     ...rest,
                     when: correctDate,
-                    name
+                    categoryTypeId
                 };
                 state.transactions.push(finalTransaction);
             })
 
             .addCase(createTransaction.rejected, (state, action) => {
+                state.error = action.payload as string;
+            })
+
+        builder
+            .addCase(updateTransaction.fulfilled, (state, action) => {
+                const {when, category_type_id: categoryTypeId, ...rest} = action.payload;
+                const correctDate = moment(when).format('YYYY-MM-DD');
+                const finalTransaction = {
+                    ...rest,
+                    when: correctDate,
+                    categoryTypeId
+                };
+                const updatedTransactionIndex = state.transactions.findIndex((transaction) =>
+                    transaction.id === action.payload.id
+                );
+                state.transactions.splice(updatedTransactionIndex, 1, finalTransaction);
+                state.currentTransaction = null;
+            })
+
+            .addCase(updateTransaction.rejected, (state, action) => {
+                state.error = action.payload as string;
+            })
+
+        builder
+            .addCase(getTransactionById.fulfilled, (state, action) => {
+                const {
+                    category_type_id: categoryTypeId,
+                    category_id: categoryId,
+                    amount,
+                    when,
+                    ...rest
+                } = action.payload;
+
+                state.currentTransaction = {
+                    ...rest,
+                    categoryId,
+                    categoryTypeId,
+                    amount: amount ? Number(amount).toFixed(2) : '0.00',
+                    when: when ? moment(when).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
+                };
+            })
+
+            .addCase(getTransactionById.rejected, (state, action) => {
                 state.error = action.payload as string;
             })
 
@@ -111,4 +188,5 @@ export const transactionsSlice = createSlice({
     },
 });
 
+export const {clearCurrentTransaction} = transactionsSlice.actions;
 export default transactionsSlice.reducer;

@@ -18,7 +18,7 @@ import {
     updateCategoryById
 } from "./controllers/categories-controller";
 import {
-    appendTransaction, deleteTransactionById,
+    appendTransaction, deleteTransactionById, getTransactionById,
     selectBalanceByUserId,
     selectTransactionsByUserId, updateTransactionById
 } from "./controllers/transactions-controller";
@@ -95,6 +95,10 @@ closeRouter.put(`${API_V1.CLOSE.PUT.TRANSACTIONS}/:id`, authenticateJWT, (reques
 
 closeRouter.delete(`${API_V1.CLOSE.DELETE.TRANSACTIONS}/:id`, authenticateJWT, (request: Request, response: Response) => {
     return deleteTransactionById(request, response);
+});
+
+closeRouter.get(`${API_V1.CLOSE.GET.TRANSACTIONS}/:id`, authenticateJWT, (request: Request, response: Response) => {
+    return getTransactionById(request, response);
 });
 
 const routes = listEndpoints(app);

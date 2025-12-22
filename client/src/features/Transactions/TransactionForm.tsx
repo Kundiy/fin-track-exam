@@ -21,7 +21,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({onCloseModal}) => {
         handleChange,
         handleTypeChange,
         handleCategoryChange,
-        errors,
+        currentTransaction,
         formState,
         categoryTypes,
         categories,
@@ -29,7 +29,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({onCloseModal}) => {
     } = useTransactionFormLogic({onCloseModal});
 
     const isError = formState.amount !== '' && !/^\d*[.,]?\d*$/.test(formState.amount);
-    console.log('isError', errors);
 
     return (
         <Box
@@ -131,7 +130,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({onCloseModal}) => {
                     color="primary"
                     disabled={isError}
                 >
-                    {TEXT.BUTTONS.CREATE}
+                    {currentTransaction ? TEXT.BUTTONS.SAVE : TEXT.BUTTONS.CREATE }
                 </Button>
             </Box>
         </Box>

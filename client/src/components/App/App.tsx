@@ -22,7 +22,6 @@ function App() {
 
     const handleConfirm = () => {
         if (idToDelete) {
-            // Вибираємо метод dispatch залежно від типу дії
             if (actionType === 'DELETE_CATEGORY') {
                 dispatch(deleteCategory(idToDelete));
             } else if (actionType === 'DELETE_TRANSACTION') {

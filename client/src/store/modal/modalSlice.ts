@@ -2,7 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 // Modal types for forms
-type ModalType = 'REGISTER' | 'NEW_CATEGORY_FORM' | 'EDIT_CATEGORY' | 'ADD_TRANSACTION' | 'NONE';
+type ModalType =
+    'REGISTER' |
+    'NEW_CATEGORY_FORM' |
+    'EDIT_CATEGORY' |
+    'ADD_TRANSACTION' |
+    'EDIT_TRANSACTION' |
+    'NONE';
 
 type ModalState = {
     modalType: ModalType;
