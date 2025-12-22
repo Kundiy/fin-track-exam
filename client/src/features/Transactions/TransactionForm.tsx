@@ -2,11 +2,13 @@ import {Box, Button, Grid, MenuItem, TextField, Typography} from "@mui/material"
 import {useTransactionFormLogic} from "./useTrasactionFormLogic.ts";
 import * as React from "react";
 import {TEXT} from "../../constants/textConstants.ts";
-import {useState} from "react";
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 type TransactionFormProps = {
     onCloseModal: () => void;
@@ -27,8 +29,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({onCloseModal}) => {
     } = useTransactionFormLogic({onCloseModal});
 
     const isError = formState.amount !== '' && !/^\d*[.,]?\d*$/.test(formState.amount);
-    const today = new Date().toISOString().split('T')[0];
-    const [dateInputType, setDateInputType] = useState<'text' | 'date'>('text');
     console.log('isError', errors);
 
     return (
@@ -54,8 +54,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({onCloseModal}) => {
                     helperText={isError ? "Please enter only numbers" : ""}
                     slotProps={{
                         htmlInput: {
-                            inputMode: 'decimal', // Відкриває цифрову клавіатуру з крапкою на телефонах
-                            step: "0.01"          // Дозволяє крок у соті частини
+                            inputMode: 'decimal',
+                            step: "0.01"
                         }
                     }}
                 />
@@ -75,7 +75,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({onCloseModal}) => {
                 <TextField
                     select
                     label="Select Category"
-                    value={formState.categoryName}
+                    value={formState.categoryId}
                     onChange={handleCategoryChange}
                     disabled={!selectedCategoryType}
                     fullWidth
@@ -90,8 +90,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({onCloseModal}) => {
                 </TextField>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                        label="Choose date" // Це замінить ваш placeholder і dd--yyyy
+                        label="Choose date"
                         value={formState.when ? dayjs(formState.when) : null}
+
                         onChange={(newValue) => {
                             const formattedDate = newValue ? newValue.format('YYYY-MM-DD') : '';
                             handleChange({

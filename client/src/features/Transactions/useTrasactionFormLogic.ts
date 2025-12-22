@@ -3,8 +3,7 @@ import type {RequestAddTransaction, TransactionFormErrors} from "../../types";
 import * as React from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {getCategoriesByType} from "../../store/category/categorySlice.ts";
-// import {registerNewUser} from "../../store/user/userSlice.ts";
-// import * as Yup from "yup";
+import {createTransaction} from "../../store/transactions/transactionsSlice.ts";
 
 type TransactionFormProps = {
     onCloseModal: () => void;
@@ -24,30 +23,13 @@ export const useTransactionFormLogic = ({onCloseModal}: TransactionFormProps) =>
     }, [dispatch, selectedCategoryType]);
 
     const handleSubmit = async (event: React.FormEvent) => {
-        console.log('submit');
         event.preventDefault();
         setErrors({});
 
-        try {
-            // await validationSchema.validate(formState, {abortEarly: false});
-            if (formState) {
-                console.log('formState: ', formState);
-                onCloseModal();
-            }
-        } catch (error) {
-            /* if (error instanceof Yup.ValidationError) {
-                 const newErrors: FormErrors = {};
-                 error.inner.forEach(error => {
-                     if (error.path) {
-                         newErrors[error.path as keyof UserData] = error.message;
-                     }
-                 });
-                 setErrors(newErrors);
-             }*/
-            console.log('error', error);
+        if (formState) {
+            dispatch(createTransaction(formState));
+            onCloseModal();
         }
-
-        onCloseModal();
     }
 
     const handleCancel = () => {
@@ -58,7 +40,7 @@ export const useTransactionFormLogic = ({onCloseModal}: TransactionFormProps) =>
     const [formState, setFormState] = useState<RequestAddTransaction>({
         amount: '',
         categoryTypeId: '',
-        categoryName: '',
+        categoryId: '',
         when: '',
         description: '',
     });
@@ -84,7 +66,7 @@ export const useTransactionFormLogic = ({onCloseModal}: TransactionFormProps) =>
         setFormState({
             ...formState,
             categoryTypeId: selectedType,
-            categoryName: ''
+            categoryId: ''
         });
         setType(selectedType);
     }
@@ -92,7 +74,7 @@ export const useTransactionFormLogic = ({onCloseModal}: TransactionFormProps) =>
     const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormState({
             ...formState,
-            categoryName: event.target.value,
+            categoryId: event.target.value,
         });
     }
 

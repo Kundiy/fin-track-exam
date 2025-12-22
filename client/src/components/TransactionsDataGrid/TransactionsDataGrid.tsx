@@ -7,9 +7,8 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import {EXPENSE_CATEGORY_ID, INCOME_CATEGORY_ID} from "../../constants/categoryTypes.ts";
 import {Delete, Edit} from "@mui/icons-material";
 import './TransactionsDataGrid.scss';
-// import {openModal} from "../../store/modal/modalSlice.ts";
-// import { useAppDispatch } from "../../store/hooks.ts";
-// import {openDeleteDialog} from "../../store/confirmationDialog/confirmationDialogSlice.ts";
+import {useAppDispatch} from "../../store/hooks.ts";
+import {openDeleteDialog} from "../../store/confirmationDialog/confirmationDialogSlice.ts";
 
 type TransactionsProps = {
     transactions: Transaction[]
@@ -38,11 +37,10 @@ const prepareRows = (transactions: Transaction[]) => {
 }
 
 function TransactionsDataGrid({transactions}: TransactionsProps) {
-    // const dispatch = useAppDispatch();
-    const rows = useMemo(() => prepareRows(transactions), [transactions]);
-    /*const handleAddTransaction = () => {
-        dispatch(openModal({ type: 'ADD_TRANSACTION' }));
-    }*/
+    const dispatch = useAppDispatch();
+    const rows = useMemo(() => {
+        return prepareRows(transactions);
+    }, [transactions]);
 
 
     const columns: GridColDef[] = [
@@ -164,7 +162,13 @@ function TransactionsDataGrid({transactions}: TransactionsProps) {
                             <IconButton
                                 size="small"
                                 className="action-button delete-btn"
-                                onClick={() => console.log('Delete', params.row.id)}
+                                // onClick={() => console.log('Delete', params.row.id)}
+                                onClick={() => dispatch(openDeleteDialog({
+                                    id: params.row.id,
+                                    actionType: 'DELETE_TRANSACTION',
+                                    title: "Delete transaction?",
+                                    description: `Are you sure you want to delete this transaction?`
+                                }))}
                             >
                                 <Delete fontSize="small" />
                             </IconButton>

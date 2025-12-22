@@ -71,4 +71,18 @@ export const QUERIES = Object.freeze({
                                     0::numeric(24, 8) as amount
                              from new_category as nc
                             `,
+    APPEND_TRANSACTION: `INSERT INTO transactions (user_id, category_id, "when", amount, description)
+                         VALUES ($1, $2, $3, $4, $5)
+                             RETURNING *, (SELECT name FROM categories WHERE id = $2) AS category_name;
+                            `,
+    UPDATE_TRANSACTION: `UPDATE transactions
+                         set "when"      = $3,
+                             amount      = $4,
+                             description = $5
+                         where id = $1 and user_id = $2
+                             RETURNING *
+                            `,
+    DELETE_TRANSACTION: `DELETE from transactions
+                         where id = $1 and user_id = $2
+                         RETURNING *`,
 });
