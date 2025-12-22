@@ -12,7 +12,8 @@ function Header() {
         handleMenu,
         handleCloseMenu,
         handleSignUpClick,
-        handleLogOut
+        handleLogOut,
+        handleAddTransaction,
     } = useHeaderLogic();
 
     // Not authorized user
@@ -52,7 +53,7 @@ function Header() {
         <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
             <Button
                 variant="contained"
-                onClick={handleSignUpClick}
+                onClick={handleAddTransaction}
                 sx={{
                     backgroundColor: '#4CAF50',
                     fontWeight: 600,

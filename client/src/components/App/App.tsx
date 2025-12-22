@@ -8,11 +8,12 @@ import {setAuthToken} from "../../store/user/userSlice.ts";
 import {deleteCategory, getCategoryTypes} from "../../store/category/categorySlice.ts";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog.tsx";
 import {closeDialog} from "../../store/confirmationDialog/confirmationDialogSlice.ts";
+import {deleteTransaction} from "../../store/transactions/transactionsSlice.ts";
 
 function App() {
     const dispatch = useAppDispatch();
     const isAuth = sessionStorage.getItem('token');
-    const { open, title, description, confirmText, idToDelete } = useAppSelector(state => state.dialog);
+    const { open, title, description, confirmText, idToDelete, actionType } = useAppSelector(state => state.dialog);
 
     useEffect(() => {
         dispatch(setAuthToken());
@@ -21,7 +22,11 @@ function App() {
 
     const handleConfirm = () => {
         if (idToDelete) {
-            dispatch(deleteCategory(idToDelete));
+            if (actionType === 'DELETE_CATEGORY') {
+                dispatch(deleteCategory(idToDelete));
+            } else if (actionType === 'DELETE_TRANSACTION') {
+                dispatch(deleteTransaction(idToDelete));
+            }
         }
         dispatch(closeDialog());
     };

@@ -21,12 +21,15 @@ export const API_V1 = Object.freeze({
         },
         POST: {
             CATEGORIES: `/categories`,
+            TRANSACTIONS: `/transactions`,
         },
         PUT: {
             CATEGORIES: `/categories`,
+            TRANSACTIONS: `/transactions`,
         },
         DELETE: {
             CATEGORIES: `/categories`,
+            TRANSACTIONS: `/transactions`,
         }
     }
 });

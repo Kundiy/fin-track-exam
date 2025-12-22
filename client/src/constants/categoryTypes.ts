@@ -15,6 +15,6 @@ export const CATEGORY_TYPES: TIdObjects = Object.freeze({
         caption: 'Expense'
     },
     '00000001-0000-0000-0000-000000000003': {
-        caption: 'balance_arrangement'
+        caption: 'Goal'
     }
 })

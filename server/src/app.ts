@@ -7,15 +7,21 @@ import {Response, Request} from "express";
 
 import openRoutesV1 from './routes/v1/open';
 import closeRoutesV1 from './routes/v1/close';
-import {dbClient, dbConnect} from "./db";
+import {dbConnect} from "./db";
 import {API_CLOSE_PATH_PREFIX, API_OPEN_PATH_PREFIX, API_V1} from "./routes/v1/api-paths";
 import {login, register} from "./controllers/auth-controller";
 import {
     appendSimpleCategory, deleteCategoryById,
     getCategoriesByCategoryType,
     getCategoryById,
-    getCategoryTypes, selectBalanceByUserId, selectTransactionsByUserId, updateCategoryById
+    getCategoryTypes,
+    updateCategoryById
 } from "./controllers/categories-controller";
+import {
+    appendTransaction, deleteTransactionById, getTransactionById,
+    selectBalanceByUserId,
+    selectTransactionsByUserId, updateTransactionById
+} from "./controllers/transactions-controller";
 
 const app = express();
 const openRouter = express.Router();
@@ -77,6 +83,22 @@ closeRouter.get(`${API_V1.CLOSE.GET.TRANSACTIONS}`, authenticateJWT, (request: R
 
 closeRouter.get(`${API_V1.CLOSE.GET.TRANSACTIONS_BALANCE}`, authenticateJWT, (request: Request, response: Response) => {
     return selectBalanceByUserId(request, response);
+});
+
+closeRouter.post(`${API_V1.CLOSE.POST.TRANSACTIONS}`, authenticateJWT, (request: Request, response: Response) => {
+    return appendTransaction(request, response);
+});
+
+closeRouter.put(`${API_V1.CLOSE.PUT.TRANSACTIONS}/:id`, authenticateJWT, (request: Request, response: Response) => {
+    return updateTransactionById(request, response);
+});
+
+closeRouter.delete(`${API_V1.CLOSE.DELETE.TRANSACTIONS}/:id`, authenticateJWT, (request: Request, response: Response) => {
+    return deleteTransactionById(request, response);
+});
+
+closeRouter.get(`${API_V1.CLOSE.GET.TRANSACTIONS}/:id`, authenticateJWT, (request: Request, response: Response) => {
+    return getTransactionById(request, response);
 });
 
 const routes = listEndpoints(app);

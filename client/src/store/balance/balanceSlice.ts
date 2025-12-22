@@ -18,7 +18,7 @@ const initialState: BalanceState = {
 
 const API_URL_BALANCE = import.meta.env.VITE_API_KEY;
 const API_URL_BALANCE_CATEGORY_TYPE = import.meta.env.VITE_API_KEY;
-const BALANCE_URL = `${API_URL_BALANCE}/balance`;
+const BALANCE_URL = `${API_URL_BALANCE}/transactions/balance`;
 const BALANCE_CATEGORY_TYPE_URL = `${API_URL_BALANCE_CATEGORY_TYPE}/categories`;
 export const client = axios.create({
     headers: {
@@ -43,7 +43,7 @@ export const getBalanceByCategoryType = createAsyncThunk(
     'balance/getBalanceByCategoryType',
     async (typeId: string, {rejectWithValue}) => {
         try {
-            const response = await client.get(`${BALANCE_CATEGORY_TYPE_URL}?categoryTypeId=${typeId}&balance=true`);
+            const response = await client.get(`${BALANCE_CATEGORY_TYPE_URL}?categoryTypeId=${typeId}`);
 
             return {
                 data: response.data,

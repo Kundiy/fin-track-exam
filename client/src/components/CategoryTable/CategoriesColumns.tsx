@@ -54,6 +54,7 @@ export const createColumns = (onEdit: (id: string) => void, dispatch: any) => [
                         className="action-button delete-btn"
                         onClick={() => dispatch(openDeleteDialog({
                             id: params.row.id,
+                            actionType: 'DELETE_CATEGORY',
                             title: "Delete category?",
                             description: `Are you sure you want to delete "${params.row.name}"?`
                         }))}

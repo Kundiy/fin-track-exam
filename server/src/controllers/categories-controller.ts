@@ -78,27 +78,3 @@ export const deleteCategoryById = async (request: Request, response: Response) =
         return response.status(500).json({message: error.message});
     }
 }
-
-export const selectTransactionsByUserId = async (request: Request, response: Response) => {
-    try {
-        const {userId} = (request as any).user;
-        const values = [userId];
-        const result = await db.query(QUERIES.SELECT_TRANSACTIONS_BY_USER_ID, values);
-        return response.status(200).json(result.rows);
-    }
-    catch (error) {
-        return response.status(500).json({message: error.message});
-    }
-}
-
-export const selectBalanceByUserId = async (request: Request, response: Response) => {
-    try {
-        const {userId} = (request as any).user;
-        const values = [userId];
-        const result = await db.query(QUERIES.SELECT_BALANCE_BY_USER_ID, values);
-        return response.status(200).json(result.rows.length > 0 ? result.rows[0] : {amount: 0});
-    }
-    catch (error) {
-        return response.status(500).json({message: error.message});
-    }
-}
