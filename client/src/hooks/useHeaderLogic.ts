@@ -14,6 +14,7 @@ export type UseHeaderLogic = {
     handleCloseMenu: () => void;
     handleSignUpClick: () => void;
     handleLogOut: () => void;
+    handleAddTransaction: () => void;
 }
 
 export const useHeaderLogic = (): UseHeaderLogic => {
@@ -46,6 +47,10 @@ export const useHeaderLogic = (): UseHeaderLogic => {
         setAnchorEl(event.currentTarget);
     };
 
+    const handleAddTransaction = () => {
+        dispatch(openModal({ type: 'ADD_TRANSACTION' }));
+    }
+
     return {
         auth,
         anchorEl,
@@ -54,5 +59,6 @@ export const useHeaderLogic = (): UseHeaderLogic => {
         handleCloseMenu,
         handleSignUpClick,
         handleLogOut,
+        handleAddTransaction,
     };
 };

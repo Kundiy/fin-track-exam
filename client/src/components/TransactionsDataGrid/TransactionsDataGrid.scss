@@ -1,0 +1,147 @@
+$primary-blue: #1976d2;
+$header-text: white;
+$income-green: #4CAF50;
+$expense-red: #d32f2f;
+$date-header-bg: #f8f9fa;
+$border-color: #edf2f7;
+$text-main: #333;
+
+.transactions-grid-container {
+  height: 600px;
+  width: 100%;
+
+  .MuiDataGrid-root {
+    border: none;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+
+
+    .type-icon {
+      font-size: 1.4rem !important;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+
+      &.income {
+        color: $income-green;
+        stroke: $income-green;
+      }
+
+      &.expense {
+        color: $expense-red;
+        stroke: $expense-red;
+      }
+    }
+
+    .action-button {
+      transition: all 0.2s ease-in-out !important;
+
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      &.edit-btn {
+        color: $primary-blue !important;
+        &:hover {
+          background-color: rgba(25, 118, 210, 0.08) !important;
+        }
+      }
+
+      &.delete-btn {
+        color: $expense-red !important;
+        &:hover {
+          background-color: rgba(211, 47, 47, 0.08) !important;
+        }
+      }
+    }
+
+    .MuiDataGrid-row {
+      max-height: none !important;
+    }
+
+    .MuiDataGrid-columnHeader {
+      background-color: $primary-blue;
+      color: $header-text;
+
+      .MuiDataGrid-columnHeaderTitleContainer {
+        justify-content: center;
+      }
+
+      .MuiDataGrid-columnHeaderTitle {
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+    }
+
+    .MuiDataGrid-cell {
+      max-height: none !important;
+      height: auto !important;
+      word-break: break-word;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid $border-color;
+      font-size: 0.875rem;
+      color: $text-main;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: normal !important;
+      line-height: 1.5 !important;
+
+      &[data-field="category"] {
+        justify-content: flex-start;
+        font-weight: 600;
+        padding-left: 16px;
+        font-size: 1.2rem;
+      }
+
+      &[data-field="description"] {
+        display: block;
+        text-align: left;
+        padding: 12px 8px;
+        overflow: visible !important;
+      }
+
+      &[data-field="amount"] {
+        justify-content: flex-end;
+        font-family: "Roboto Mono", monospace;
+      }
+    }
+
+    .date-header-row {
+      background-color: $date-header-bg !important;
+
+      & div {
+        font-weight: 700;
+        font-family: "Roboto Mono", monospace;
+      }
+
+      .MuiDataGrid-cell {
+        font-weight: 700;
+        color: #1a1a1a;
+        font-size: 0.95rem;
+        justify-content: flex-start;
+      }
+
+      &:hover {
+        background-color: $date-header-bg !important;
+      }
+    }
+
+    .MuiDataGrid-iconButtonContainer,
+    .MuiDataGrid-columnSeparator,
+    .MuiDataGrid-menuIcon {
+      display: none;
+    }
+
+    .MuiDataGrid-columnHeader:focus,
+    .MuiDataGrid-columnHeader:focus-within {
+      outline: none;
+    }
+  }
+}
+
+.text-income { color: $income-green; }
+.text-expense { color: $expense-red; }

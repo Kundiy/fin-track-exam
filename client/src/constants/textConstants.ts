@@ -17,6 +17,7 @@ export const TEXT = {
         INCOME_CATEGORIES: "income categories",
         CATEGORIES_PAGE: "categories",
         DASHBOARD_PAGE: "dashboard",
+        TRANSACTIONS_PAGE: "transactions",
     } as const,
 
     PAGES_TEXTS: {
@@ -52,6 +53,9 @@ export const TEXT = {
         CATEGORY_FORM_TITLE: "create new category",
         CATEGORY_FORM_TITLE_UPDATE: "edit category",
         NEW_CATEGORY_INPUT_PLACEHOLDER: "new category",
-
+        TRANSACTION_FORM_TITLE: "create new transaction",
+        TRANSACTION_FORM_TITLE_UPDATE: "update transaction",
+        DESCRIPTION: "description",
+        AMOUNT: "enter amount",
     } as const,
 };

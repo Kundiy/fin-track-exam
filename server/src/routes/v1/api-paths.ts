@@ -16,16 +16,20 @@ export const API_V1 = Object.freeze({
         GET: {
             CATEGORIES: `/categories`,
             CATEGORY_TYPES: `/category-types`,
-            BALANCE: `/balance`,
+            TRANSACTIONS_BALANCE: `/transactions/balance`,
+            TRANSACTIONS: `/transactions`,
         },
         POST: {
             CATEGORIES: `/categories`,
+            TRANSACTIONS: `/transactions`,
         },
         PUT: {
             CATEGORIES: `/categories`,
+            TRANSACTIONS: `/transactions`,
         },
         DELETE: {
             CATEGORIES: `/categories`,
+            TRANSACTIONS: `/transactions`,
         }
     }
 });

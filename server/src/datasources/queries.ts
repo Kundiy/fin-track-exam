@@ -33,6 +33,19 @@ export const QUERIES = Object.freeze({
                                          left outer join transactions tri on tri.category_id = c.id and c.category_type_id = '00000001-0000-0000-0000-000000000001'
                                          left outer join transactions tro on tro.category_id = c.id and c.category_type_id = '00000001-0000-0000-0000-000000000002'
                                 where c.user_id = $1`,
+    SELECT_TRANSACTIONS_BY_USER_ID: `select
+                                         t.id,
+                                         c.category_type_id,
+                                         c.name,
+                                         t."when",
+                                         t.description,
+                                         t.amount
+                                     from categories c
+                                              inner join transactions t on t.category_id = c.id
+                                     where
+                                         c.user_id = $1
+                                `,
+
     SELECT_CATEGORY_BY_CATEGORY_TYPE: `select c.id, 
                                               c.name, 
                                               sum(COALESCE(t.amount, 0)) as amount
@@ -58,4 +71,48 @@ export const QUERIES = Object.freeze({
                                     0::numeric(24, 8) as amount
                              from new_category as nc
                             `,
+    UPDATE_TRANSACTION: `
+                                WITH updated_row AS (
+                                UPDATE transactions
+                                SET "when"      = $3,
+                                    amount      = $4,
+                                    description = $5
+                                WHERE id = $1 AND user_id = $2
+                                    RETURNING *
+                            )
+                                SELECT
+                                    u.*,
+                                    c.name AS name,
+                                    c.category_type_id
+                                FROM updated_row u
+                                         JOIN categories c ON u.category_id = c.id
+                            `,
+    DELETE_TRANSACTION: `DELETE from transactions
+                         where id = $1 and user_id = $2
+                         RETURNING *`,
+    SELECT_TRANSACTION_BY_ID: `
+                        SELECT
+                            t.id,
+                            t.category_id,
+                            t."when",
+                            t.amount,
+                            t.description,
+                            c.category_type_id
+                        FROM transactions t
+                                 JOIN categories c ON t.category_id = c.id
+                        WHERE t.id = $1 AND t.user_id = $2
+                        `,
+    APPEND_TRANSACTION: `
+                        WITH inserted_row AS (
+                        INSERT INTO transactions (user_id, category_id, "when", amount, description)
+                        VALUES ($1, $2, $3, $4, $5)
+                            RETURNING *
+                            )
+                        SELECT
+                            i.*,
+                            c.name AS name,
+                            c.category_type_id AS category_type_id
+                        FROM inserted_row i
+                                 JOIN categories c ON i.category_id = c.id
+                    `,
 });
