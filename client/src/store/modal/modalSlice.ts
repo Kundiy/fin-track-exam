@@ -9,6 +9,8 @@ type ModalType =
     'EDIT_CATEGORY' |
     'ADD_TRANSACTION' |
     'EDIT_TRANSACTION' |
+    'ADD_GOAL' |
+    'EDIT_GOAL' |
     'NONE';
 
 type ModalState = {

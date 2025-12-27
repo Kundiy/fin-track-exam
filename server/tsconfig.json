@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "lib": ["ES2023"],
+    "lib": [
+      "ES2023"
+    ],
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "verbatimModuleSyntax": true,
-
+    "verbatimModuleSyntax": false,
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

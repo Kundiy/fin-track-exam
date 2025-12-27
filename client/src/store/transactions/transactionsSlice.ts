@@ -54,9 +54,8 @@ export const getTransactionById = createAsyncThunk(
 export const createTransaction = createAsyncThunk<Transaction, RequestAddTransaction, { rejectValue: string }>(
     'transactions/createTransaction',
     async (newTransaction: RequestAddTransaction, { rejectWithValue }) => {
-        const { id, ...rest } = newTransaction;
         try {
-            const { data } = await client.post(TRANSACTIONS_URL, rest);
+            const { data } = await client.post(TRANSACTIONS_URL, newTransaction);
             return data;
         } catch (error) {
             console.log(error);
@@ -103,7 +102,7 @@ export const transactionsSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getTransactionsByUser.fulfilled, (state, action) => {
-                state.transactions = action.payload.map((transaction: Transaction) => {
+                state.transactions = action.payload.map((transaction: any) => {
                     const { category_type_id: categoryTypeId, when, ...rest } = transaction;
                     const correctDate = moment(when).format('YYYY-MM-DD');
 
@@ -121,7 +120,7 @@ export const transactionsSlice = createSlice({
 
         builder
             .addCase(createTransaction.fulfilled, (state, action) => {
-                const { when, category_type_id: categoryTypeId, ...rest } = action.payload;
+                const { when, category_type_id: categoryTypeId, ...rest } = action.payload as any;
                 const correctDate = moment(when).format('YYYY-MM-DD');
                 const finalTransaction = {
                     ...rest,
@@ -137,7 +136,7 @@ export const transactionsSlice = createSlice({
 
         builder
             .addCase(updateTransaction.fulfilled, (state, action) => {
-                const { when, category_type_id: categoryTypeId, ...rest } = action.payload;
+                const { when, category_type_id: categoryTypeId, ...rest } = action.payload as any;
                 const correctDate = moment(when).format('YYYY-MM-DD');
                 const finalTransaction = {
                     ...rest,
@@ -163,7 +162,7 @@ export const transactionsSlice = createSlice({
                     amount,
                     when,
                     ...rest
-                } = action.payload;
+                } = action.payload as any;
 
                 state.currentTransaction = {
                     ...rest,

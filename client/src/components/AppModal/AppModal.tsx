@@ -7,6 +7,7 @@ import type {RootState} from "../../store/store.ts";
 import {closeModal} from "../../store/modal/modalSlice.ts";
 import AddCategoryForm from "../../features/Categories/AddCategoryForm.tsx";
 import TransactionForm from "../../features/Transactions/TransactionForm.tsx";
+import AddGoalForm from "../../features/Goals/AddGoalForm.tsx";
 
 const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
     'LOGIN': LoginForm,
@@ -15,6 +16,8 @@ const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
     'EDIT_CATEGORY': AddCategoryForm,
     'ADD_TRANSACTION': TransactionForm,
     'EDIT_TRANSACTION': TransactionForm,
+    'ADD_GOAL': AddGoalForm,
+    'EDIT_GOAL': AddGoalForm,
 };
 
 const AppModal = () => {

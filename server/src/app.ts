@@ -22,6 +22,7 @@ import {
     selectBalanceByUserId,
     selectTransactionsByUserId, updateTransactionById
 } from "./controllers/transactions-controller";
+import { getGoals, createGoal, updateGoal, deleteGoal } from "./controllers/goals-controller";
 
 const app = express();
 const openRouter = express.Router();
@@ -99,6 +100,22 @@ closeRouter.delete(`${API_V1.CLOSE.DELETE.TRANSACTIONS}/:id`, authenticateJWT, (
 
 closeRouter.get(`${API_V1.CLOSE.GET.TRANSACTIONS}/:id`, authenticateJWT, (request: Request, response: Response) => {
     return getTransactionById(request, response);
+});
+
+closeRouter.get(API_V1.CLOSE.GET.GOALS, authenticateJWT, (request: Request, response: Response) => {
+    return getGoals(request, response);
+});
+
+closeRouter.post(API_V1.CLOSE.POST.GOALS, authenticateJWT, (request: Request, response: Response) => {
+    return createGoal(request, response);
+});
+
+closeRouter.put(`${API_V1.CLOSE.PUT.GOALS}/:id`, authenticateJWT, (request: Request, response: Response) => {
+    return updateGoal(request, response);
+});
+
+closeRouter.delete(`${API_V1.CLOSE.DELETE.GOALS}/:id`, authenticateJWT, (request: Request, response: Response) => {
+    return deleteGoal(request, response);
 });
 
 const routes = listEndpoints(app);

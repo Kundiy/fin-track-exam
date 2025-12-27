@@ -4,10 +4,14 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import CategoriesChart from "../CategoriesChart/CategoriesChart.tsx";
 import BalanceCard from "../BalanceCard/BalanceCard.tsx";
+import GoalsGrid from "../GoalsGrid/GoalsGrid.tsx";
 import SavingsIcon from "@mui/icons-material/Savings";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import {useAppSelector} from "../../store/hooks.ts";
+import {useAppSelector, useAppDispatch} from "../../store/hooks.ts";
+import { openModal } from "../../store/modal/modalSlice";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 
 const Item = styled(Paper)(({theme}) => ({
     backgroundColor: '#fff',
@@ -29,12 +33,17 @@ const ICONS_MAP: Record<IconType, JSX.Element> = {
 };
 
 export default function DashboardGrid() {
+    const dispatch = useAppDispatch();
     const balance = useAppSelector(state => state.balance);
     const cards: { type: IconType; title: string, balance: string }[] = [
         { type: 'balance', title: 'Balance', balance: balance.amount },
         { type: 'income', title: 'Income', balance: balance.income },
         { type: 'expense', title: 'Expenses', balance: balance.expenses },
     ];
+
+    const handleAddGoal = () => {
+        dispatch(openModal({ type: 'ADD_GOAL' }));
+    };
 
     return (
         <Box sx={{flexGrow: 1, mt: 5}}>
@@ -58,14 +67,21 @@ export default function DashboardGrid() {
                         <CategoriesChart/>
                     </Item>
                 </Grid>
-                <Grid size={4}>
-                    <Item>Financial Goals</Item>
-                </Grid>
-                <Grid size={4}>
-                    <Item>Financial Goals</Item>
-                </Grid>
-                <Grid size={4}>
-                    <Item>Financial Goals</Item>
+                <Grid size={12}>
+                    <Item sx={{ p: 3 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                            <h3 style={{ margin: 0 }}>Financial Goals</h3>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                startIcon={<AddIcon />}
+                                onClick={handleAddGoal}
+                            >
+                                Add Goal
+                            </Button>
+                        </Box>
+                        <GoalsGrid />
+                    </Item>
                 </Grid>
             </Grid>
         </Box>
