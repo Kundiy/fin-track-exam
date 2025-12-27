@@ -163,7 +163,7 @@ export const transactionsSlice = createSlice({
                     amount,
                     when,
                     ...rest
-                } = action.payload;
+                } = action.payload as any;
 
                 state.currentTransaction = {
                     ...rest,

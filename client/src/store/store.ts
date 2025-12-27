@@ -5,6 +5,7 @@ import categoriesReducer from "./category/categorySlice.ts";
 import dialogReducer from "./confirmationDialog/confirmationDialogSlice.ts";
 import balanceReducer from "./balance/balanceSlice.ts";
 import transactionsReducer from "./transactions/transactionsSlice.ts";
+import goalsReducer from "./goals/goalsSlice.ts";
 
 export const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
         balance: balanceReducer,
         categories: categoriesReducer,
         transactions: transactionsReducer,
+        goals: goalsReducer,
     },
 });
 

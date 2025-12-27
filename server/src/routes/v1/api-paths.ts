@@ -18,18 +18,22 @@ export const API_V1 = Object.freeze({
             CATEGORY_TYPES: `/category-types`,
             TRANSACTIONS_BALANCE: `/transactions/balance`,
             TRANSACTIONS: `/transactions`,
+            GOALS: `/goals`,
         },
         POST: {
             CATEGORIES: `/categories`,
             TRANSACTIONS: `/transactions`,
+            GOALS: `/goals`,
         },
         PUT: {
             CATEGORIES: `/categories`,
             TRANSACTIONS: `/transactions`,
+            GOALS: `/goals`,
         },
         DELETE: {
             CATEGORIES: `/categories`,
             TRANSACTIONS: `/transactions`,
+            GOALS: `/goals`,
         }
     }
 });

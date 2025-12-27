@@ -115,4 +115,57 @@ export const QUERIES = Object.freeze({
                         FROM inserted_row i
                                  JOIN categories c ON i.category_id = c.id
                     `,
+    INSERT_GOAL: `
+        WITH new_category AS (
+            INSERT INTO categories (user_id, category_type_id, name)
+            VALUES ($1, '00000001-0000-0000-0000-000000000003', $2)
+            RETURNING id
+        )
+        INSERT INTO goals (user_id, category_id, name, goal_amount, goal_target_date)
+        VALUES ($1, (SELECT id FROM new_category), $2, $3, $4)
+        RETURNING id, name, goal_amount::numeric(24, 8), TO_CHAR(goal_target_date, 'YYYY-MM-DD') as goal_target_date, 0::numeric(24, 8) as amount
+    `,
+    SELECT_GOALS_BY_USER_ID: `
+        SELECT
+            g.id,
+            g.name,
+            g.goal_amount::numeric(24, 8),
+            g.goal_amount::numeric(24, 8),
+            TO_CHAR(g.goal_target_date, 'YYYY-MM-DD') as goal_target_date,
+            COALESCE(SUM(t.amount), 0)::numeric(24, 8) as amount
+        FROM goals g
+        LEFT JOIN transactions t ON g.category_id = t.category_id
+        WHERE g.user_id = $1
+        GROUP BY g.id
+    `,
+    UPDATE_GOAL: `
+        WITH updated_goal AS (
+            UPDATE goals
+            SET name = $3,
+                goal_amount = $4,
+                goal_target_date = $5
+            WHERE id = $1 AND user_id = $2
+            RETURNING *
+        ),
+        updated_category AS (
+            UPDATE categories
+            SET name = $3
+            WHERE id = (SELECT category_id FROM updated_goal)
+        )
+        SELECT
+            ug.id,
+            ug.name,
+            ug.goal_amount::numeric(24, 8),
+            ug.goal_amount::numeric(24, 8),
+            TO_CHAR(ug.goal_target_date, 'YYYY-MM-DD') as goal_target_date,
+            COALESCE(SUM(t.amount), 0)::numeric(24, 8) as amount
+        FROM updated_goal ug
+        LEFT JOIN transactions t ON ug.category_id = t.category_id
+        GROUP BY ug.id, ug.name, ug.goal_amount, ug.goal_target_date
+    `,
+    DELETE_GOAL: `
+        DELETE FROM categories
+        WHERE id = (SELECT category_id FROM goals WHERE id = $1 AND user_id = $2)
+        RETURNING id
+    `
 });
