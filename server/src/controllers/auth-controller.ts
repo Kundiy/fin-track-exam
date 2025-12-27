@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as db from '../db';
+import { dbClient } from "../db";
 import { QUERIES } from "../datasources/queries";
 
 const generateToken = (user: { id: number, email: string }) => {
@@ -26,7 +27,7 @@ export const register = async (req: Request, res: Response) => {
 
         const values = [email, passwordHash, name, lastname];
 
-        const result = await db.query(QUERIES.INSERT_NEW_USER, values);
+        const result = await dbClient.query(QUERIES.INSERT_NEW_USER, values);
         const newUser = result.rows[0];
 
         const token = jwt.sign(

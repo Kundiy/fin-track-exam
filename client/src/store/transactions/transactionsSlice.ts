@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import moment from 'moment';
 import type {
     RequestAddTransaction,
@@ -15,17 +15,21 @@ const initialState: TransactionsInitialState = {
 
 const API_URL = import.meta.env.VITE_API_KEY;
 const TRANSACTIONS_URL = `${API_URL}/transactions`;
-export const client = axios.create({
-    headers: {
-        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+export const client = axios.create();
+
+client.interceptors.request.use((config) => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
 });
 
 export const getTransactionsByUser = createAsyncThunk(
     'transactions/getTransactions',
-    async (_, {rejectWithValue}) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const {data} = await client.get(TRANSACTIONS_URL);
+            const { data } = await client.get(TRANSACTIONS_URL);
             return data;
         } catch (error) {
             console.log(error);
@@ -36,9 +40,9 @@ export const getTransactionsByUser = createAsyncThunk(
 
 export const getTransactionById = createAsyncThunk(
     'transactions/getTransactionById',
-    async (transactionId: string, {rejectWithValue}) => {
+    async (transactionId: string, { rejectWithValue }) => {
         try {
-            const {data} = await client.get(`${TRANSACTIONS_URL}/${transactionId}`);
+            const { data } = await client.get(`${TRANSACTIONS_URL}/${transactionId}`);
             return data;
         } catch (error) {
             console.log(error);
@@ -49,10 +53,10 @@ export const getTransactionById = createAsyncThunk(
 
 export const createTransaction = createAsyncThunk<Transaction, RequestAddTransaction, { rejectValue: string }>(
     'transactions/createTransaction',
-    async (newTransaction: RequestAddTransaction, {rejectWithValue}) => {
-        const {id, ...rest} = newTransaction;
+    async (newTransaction: RequestAddTransaction, { rejectWithValue }) => {
+        const { id, ...rest } = newTransaction;
         try {
-            const {data} = await client.post(TRANSACTIONS_URL, rest);
+            const { data } = await client.post(TRANSACTIONS_URL, rest);
             return data;
         } catch (error) {
             console.log(error);
@@ -63,10 +67,10 @@ export const createTransaction = createAsyncThunk<Transaction, RequestAddTransac
 
 export const updateTransaction = createAsyncThunk<Transaction, Transaction, { rejectValue: string }>(
     'transactions/updateTransaction',
-    async (updatedTransaction: Transaction, {rejectWithValue}) => {
+    async (updatedTransaction: Transaction, { rejectWithValue }) => {
         try {
             const transactionId = updatedTransaction.id;
-            const {data} = await client.put(`${TRANSACTIONS_URL}/${transactionId}`, updatedTransaction);
+            const { data } = await client.put(`${TRANSACTIONS_URL}/${transactionId}`, updatedTransaction);
             return data;
         } catch (error) {
             console.log(error);
@@ -77,9 +81,9 @@ export const updateTransaction = createAsyncThunk<Transaction, Transaction, { re
 
 export const deleteTransaction = createAsyncThunk(
     'transactions/deleteTransaction',
-    async (transactionId: string, {rejectWithValue}) => {
+    async (transactionId: string, { rejectWithValue }) => {
         try {
-            const {data} = await client.delete(`${TRANSACTIONS_URL}/${transactionId}`);
+            const { data } = await client.delete(`${TRANSACTIONS_URL}/${transactionId}`);
             return data;
         } catch (error) {
             console.log(error);
@@ -100,7 +104,7 @@ export const transactionsSlice = createSlice({
         builder
             .addCase(getTransactionsByUser.fulfilled, (state, action) => {
                 state.transactions = action.payload.map((transaction: Transaction) => {
-                    const {category_type_id: categoryTypeId, when, ...rest} = transaction;
+                    const { category_type_id: categoryTypeId, when, ...rest } = transaction;
                     const correctDate = moment(when).format('YYYY-MM-DD');
 
                     return {
@@ -117,7 +121,7 @@ export const transactionsSlice = createSlice({
 
         builder
             .addCase(createTransaction.fulfilled, (state, action) => {
-                const {when, category_type_id: categoryTypeId, ...rest} = action.payload;
+                const { when, category_type_id: categoryTypeId, ...rest } = action.payload;
                 const correctDate = moment(when).format('YYYY-MM-DD');
                 const finalTransaction = {
                     ...rest,
@@ -133,7 +137,7 @@ export const transactionsSlice = createSlice({
 
         builder
             .addCase(updateTransaction.fulfilled, (state, action) => {
-                const {when, category_type_id: categoryTypeId, ...rest} = action.payload;
+                const { when, category_type_id: categoryTypeId, ...rest } = action.payload;
                 const correctDate = moment(when).format('YYYY-MM-DD');
                 const finalTransaction = {
                     ...rest,
@@ -187,5 +191,5 @@ export const transactionsSlice = createSlice({
     },
 });
 
-export const {clearCurrentTransaction} = transactionsSlice.actions;
+export const { clearCurrentTransaction } = transactionsSlice.actions;
 export default transactionsSlice.reducer;

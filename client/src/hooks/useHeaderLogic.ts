@@ -13,6 +13,7 @@ export type UseHeaderLogic = {
     handleMenu: (event: React.MouseEvent<HTMLElement>) => void;
     handleCloseMenu: () => void;
     handleSignUpClick: () => void;
+    handleLoginClick: () => void;
     handleLogOut: () => void;
     handleAddTransaction: () => void;
 }
@@ -31,9 +32,14 @@ export const useHeaderLogic = (): UseHeaderLogic => {
         setAnchorEl(null);
     };
 
-    // Close user icon menu
+    // Open register modal
     const handleSignUpClick = () => {
         dispatch(openModal({ type: 'REGISTER' }));
+    }
+
+    // Open login modal
+    const handleLoginClick = () => {
+        dispatch(openModal({ type: 'LOGIN' }));
     }
 
     const handleLogOut = () => {
@@ -58,6 +64,7 @@ export const useHeaderLogic = (): UseHeaderLogic => {
         handleMenu,
         handleCloseMenu,
         handleSignUpClick,
+        handleLoginClick,
         handleLogOut,
         handleAddTransaction,
     };

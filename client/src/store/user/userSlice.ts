@@ -10,6 +10,7 @@ const initialState: UserState = {
 
 const API_URL = import.meta.env.VITE_API_KEY_OPEN;
 const REGISTER_URL = `${API_URL}/register`;
+const LOGIN_URL = `${API_URL}/login`;
 export const client = axios.create();
 
 export const registerNewUser = createAsyncThunk<ResponseData, RegisterData, { rejectValue: string }>(
@@ -28,7 +29,32 @@ export const registerNewUser = createAsyncThunk<ResponseData, RegisterData, { re
             }
             return rejectWithValue('Network error');
         }
-    })
+    }
+);
+
+type LoginData = {
+    email: string;
+    password: string;
+}
+
+export const loginUser = createAsyncThunk<ResponseData, LoginData, { rejectValue: string }>(
+    'user/loginUser',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const result = await client.post(LOGIN_URL, credentials);
+            const newToken = result.data.token;
+            sessionStorage.setItem('token', newToken);
+            client.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+            return result.data;
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                const errorMessage = error.response.data.error || error.response.data.message || 'Invalid email or password';
+                return rejectWithValue(errorMessage);
+            }
+            return rejectWithValue('Network error');
+        }
+    }
+)
 
 export const userSlice = createSlice({
     name: 'user',
@@ -50,6 +76,10 @@ export const userSlice = createSlice({
             state.error = '';
         },
 
+        clearLoginError: (state) => {
+            state.error = '';
+        },
+
         setAuthToken: (state) => {
             const isAuth = sessionStorage.getItem('token');
             if (!isAuth) return;
@@ -66,6 +96,14 @@ export const userSlice = createSlice({
             })
             .addCase(registerNewUser.rejected, (state, action) => {
                 state.error = action.payload;
+            })
+            .addCase(loginUser.fulfilled, (state, action) => {
+                state.user = action.payload.user;
+                state.isAuthenticated = true;
+                state.error = '';
+            })
+            .addCase(loginUser.rejected, (state, action) => {
+                state.error = action.payload;
             });
     }
 
@@ -73,6 +111,6 @@ export const userSlice = createSlice({
 
 
 
-export const { loginSuccessMock, logout, clearRegistrationError, setAuthToken } = userSlice.actions;
+export const { loginSuccessMock, logout, clearRegistrationError, clearLoginError, setAuthToken } = userSlice.actions;
 
 export default userSlice.reducer;
