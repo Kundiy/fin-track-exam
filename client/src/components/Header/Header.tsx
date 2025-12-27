@@ -12,6 +12,7 @@ function Header() {
         handleMenu,
         handleCloseMenu,
         handleSignUpClick,
+        handleLoginClick,
         handleLogOut,
         handleAddTransaction,
     } = useHeaderLogic();
@@ -34,7 +35,7 @@ function Header() {
             </Button>
             <Button
                 variant="outlined" color="inherit"
-                onClick={handleSignUpClick}
+                onClick={handleLoginClick}
                 startIcon={<PersonIcon/>}
                 sx={{
                     '&:hover': {

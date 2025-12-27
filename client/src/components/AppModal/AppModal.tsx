@@ -1,5 +1,6 @@
 import {Dialog, DialogContent} from "@mui/material";
 import RegisterForm from '../../features/Auth/RegisterForm/RegisterForm.tsx';
+import LoginForm from '../../features/Auth/LoginForm/LoginForm.tsx';
 import {useSelector} from "react-redux";
 import {useAppDispatch} from "../../store/hooks.ts";
 import type {RootState} from "../../store/store.ts";
@@ -8,12 +9,12 @@ import AddCategoryForm from "../../features/Categories/AddCategoryForm.tsx";
 import TransactionForm from "../../features/Transactions/TransactionForm.tsx";
 
 const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
+    'LOGIN': LoginForm,
     'REGISTER': RegisterForm,
     'NEW_CATEGORY_FORM': AddCategoryForm,
     'EDIT_CATEGORY': AddCategoryForm,
     'ADD_TRANSACTION': TransactionForm,
     'EDIT_TRANSACTION': TransactionForm,
-    // ...LOGIN etc
 };
 
 const AppModal = () => {

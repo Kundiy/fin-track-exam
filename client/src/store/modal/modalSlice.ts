@@ -4,6 +4,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 // Modal types for forms
 type ModalType =
     'REGISTER' |
+    'LOGIN' |
     'NEW_CATEGORY_FORM' |
     'EDIT_CATEGORY' |
     'ADD_TRANSACTION' |
