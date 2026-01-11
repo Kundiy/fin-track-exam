@@ -1,34 +1,18 @@
-import {StyledButton, StyledToggleButton, StyledToggleButtonGroup} from "./CategoryHeader.styled.ts";
+import {StyledButton} from "./CategoryHeader.styled.ts";
 import {TEXT} from "../../constants/textConstants.ts";
 import './CategoryHeader.scss';
-import {useCategoriesHeaderLogic} from "../../hooks/useCategoriesHeaderLogic.ts";
+import {useCategoriesHeaderLogic} from "../../features/Categories/useCategoriesHeaderLogic.ts";
+import CategoryTypeToggleButtons from "../CategoryTypeToggleButtons/CategoryTypeToggleButtons.tsx";
 
 
 function CategoryHeader() {
-    const {categoryType, handleChange, handleAddCategoryClick} = useCategoriesHeaderLogic();
+    const {
+        handleAddCategoryClick
+    } = useCategoriesHeaderLogic();
 
     return (
         <div className="category-header">
-            <StyledToggleButtonGroup
-                color="standard"
-                value={categoryType}
-                exclusive
-                onChange={handleChange}
-                aria-label="Categories Type"
-            >
-                <StyledToggleButton
-                    value={TEXT.BUTTONS.EXPENSES}
-                >
-                    {TEXT.BUTTONS.EXPENSES}
-                </StyledToggleButton>
-
-                <StyledToggleButton
-                    value={TEXT.BUTTONS.INCOME}
-                >
-                    {TEXT.BUTTONS.INCOME}
-                </StyledToggleButton>
-            </StyledToggleButtonGroup>
-
+            <CategoryTypeToggleButtons />
             <StyledButton
                 variant="contained"
                 onClick={handleAddCategoryClick}

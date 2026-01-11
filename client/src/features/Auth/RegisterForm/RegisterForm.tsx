@@ -1,42 +1,23 @@
 import {Box, Button, Grid, TextField, Typography} from "@mui/material";
-import {useState} from "react";
-import {useAppDispatch} from "../../../store/hooks";
-import {loginSuccessMock} from "../../../store/user/userSlice.ts";
 import {TEXT} from "../../../constants/textConstants.ts";
 import * as React from "react";
+import {useRegisterFormLogic} from "../useRegisterFormLogic.ts";
 
 type RegisterFormProps = {
     onCloseModal: () => void;
 }
 const RegisterForm: React.FC<RegisterFormProps> = ({onCloseModal}) => {
-    const dispatch = useAppDispatch();
-    const [formState, setFormState] = useState({
-        name: '',
-        lastName: '',
-        email: '',
-        password: '',
-        repeatPassword: '',
-    });
+    const {
+        formState,
+        errors,
+        serverEmailError,
+        handleChange,
+        handleSubmit,
+        handleCancel
+    } = useRegisterFormLogic({onCloseModal});
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFormState({
-            ...formState,
-            [event.target.name]: event.target.value,
-        });
-    };
-
-    // Stub to send form data
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log('Registration Data:', formState);
-        //dispatch(registerUser(formState))
-        dispatch(loginSuccessMock());
-        onCloseModal();
-    };
-
-    const handleCancel = () => {
-        onCloseModal();
-    };
+    const emailErrorText = errors.email || serverEmailError;
+    const hasEmailError = !!emailErrorText;
 
     return (
         <Box
@@ -59,14 +40,18 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onCloseModal}) => {
                     name="name"
                     value={formState.name}
                     onChange={handleChange}
+                    error={!!errors.name}
+                    helperText={errors.name}
                 />
                 <TextField
                     required
                     fullWidth
                     label={TEXT.FORMS.LASTNAME}
-                    name="lastName"
-                    value={formState.lastName}
+                    name="lastname"
+                    value={formState.lastname}
                     onChange={handleChange}
+                    error={!!errors.lastname}
+                    helperText={errors.lastname}
                 />
                 <TextField
                     required
@@ -76,6 +61,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onCloseModal}) => {
                     type="email"
                     value={formState.email}
                     onChange={handleChange}
+                    error={hasEmailError}
+                    helperText={emailErrorText}
                 />
                 <TextField
                     required
@@ -85,6 +72,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onCloseModal}) => {
                     type="password"
                     value={formState.password}
                     onChange={handleChange}
+                    error={!!errors.password}
+                    helperText={errors.password}
                 />
                 <TextField
                     required
@@ -94,6 +83,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({onCloseModal}) => {
                     type="password"
                     value={formState.repeatPassword}
                     onChange={handleChange}
+                    error={!!errors.repeatPassword}
+                    helperText={errors.repeatPassword}
                 />
             </Grid>
 

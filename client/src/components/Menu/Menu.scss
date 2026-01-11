@@ -1,0 +1,64 @@
+.menu {
+    width: 100%;
+    height: 800px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #243D59;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    .MuiList-root {
+        width: 100%;
+        padding: 0;
+    }
+
+    &.dark {
+        background-color: #243D59;
+
+        .MuiListItem-root {
+            color: #fff;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            text-decoration: none;
+            cursor: pointer;
+
+            .MuiListItemIcon-root {
+                color: #fff;
+            }
+
+            .MuiListItemText-primary {
+                text-transform: capitalize;
+            }
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+    }
+
+    &.light {
+        background-color: #FDFDFD;
+
+        .MuiListItem-root {
+            color: #424242;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            text-decoration: none;
+            cursor: pointer;
+
+            .MuiListItemIcon-root {
+                color: #424242;
+            }
+
+            .MuiListItemText-primary {
+                text-transform: capitalize;
+            }
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+        }
+    }
+}

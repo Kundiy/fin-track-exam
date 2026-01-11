@@ -1,0 +1,9 @@
+Install the docker: https://docs.docker.com/desktop/setup/install/windows-install
+Create docker container:  docker-compose up -d --build
+To rebuild container with updates: docker-compose up -d --build
+Database user: sqladmin
+Database password: sqladmin
+Database name: expenses
+Docker logs: docker-compose logs -f app
+Export database DDL: docker-compose exec -T db pg_dump -U sqladmin expenses > my_backup.sql
+Import database DDL: Get-Content my_backup.sql | docker-compose exec -T db psql -U sqladmin expenses

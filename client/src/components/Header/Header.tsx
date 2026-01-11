@@ -8,11 +8,13 @@ function Header() {
     const {
         auth,
         anchorEl,
-        totalBalance,
+        balance,
         handleMenu,
         handleCloseMenu,
         handleSignUpClick,
-        handleLogOut
+        handleLoginClick,
+        handleLogOut,
+        handleAddTransaction,
     } = useHeaderLogic();
 
     // Not authorized user
@@ -27,13 +29,13 @@ function Header() {
                         backgroundColor: '#2e7d32',
                         boxShadow: 6,
                     },
-            }}
+                }}
             >
                 {TEXT.BUTTONS.SIGN_IN}
             </Button>
             <Button
                 variant="outlined" color="inherit"
-                onClick={handleSignUpClick}
+                onClick={handleLoginClick}
                 startIcon={<PersonIcon/>}
                 sx={{
                     '&:hover': {
@@ -52,7 +54,7 @@ function Header() {
         <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
             <Button
                 variant="contained"
-                onClick={handleSignUpClick}
+                onClick={handleAddTransaction}
                 sx={{
                     backgroundColor: '#4CAF50',
                     fontWeight: 600,
@@ -117,9 +119,11 @@ function Header() {
                                     marginTop: 0.3,
                                     marginLeft: '80px',
                                     color: '#424242'
-                            }}>
+                                }}>
                                 <span>{'Total Balance: '}</span>
-                                ${totalBalance.toLocaleString()}
+                                <span style={{color: Number(balance.amount) >= 0 ? 'green' : 'red'}}>
+                                    ${Number(balance.amount).toFixed(2)}
+                                </span>
                             </Typography>
                         )}
                     </Box>

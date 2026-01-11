@@ -1,3 +1,25 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Testing
+coverage
+
+# Production
+dist
+dist-ssr
+build
+*.local
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# Note: client/.env.development and client/.env.production are checked in as they verify public config
+
 # Logs
 logs
 *.log
@@ -7,19 +29,27 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Database
+server/db-data/
+*.sql
+*.sqlite
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+# IDEs and Editors
 .idea
-.DS_Store
+.vscode
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-/fin-track-exam.iml
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary / Generated
+client/lint_report.json
+client/features_lint.json
+server/scripts/check_email.ts

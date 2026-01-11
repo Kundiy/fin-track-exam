@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: sqladmin
+      POSTGRES_PASSWORD: sqladmin
+      POSTGRES_DB: expenses
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
