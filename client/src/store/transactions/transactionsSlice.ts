@@ -55,19 +55,10 @@ export const getTransactionById = createAsyncThunk(
 
 export const createTransaction = createAsyncThunk<Transaction, RequestAddTransaction, { rejectValue: string }>(
     'transactions/createTransaction',
-<<<<<<< HEAD
-    async (newTransaction: RequestAddTransaction, { rejectWithValue, dispatch }) => {
-        try {
-            const { data } = await client.post(TRANSACTIONS_URL, newTransaction);
-            dispatch(getBalanceByUser());
-            dispatch(getBalanceByCategoryType(INCOME_CATEGORY_ID));
-            dispatch(getBalanceByCategoryType(EXPENSE_CATEGORY_ID));
-=======
     async (newTransaction: RequestAddTransaction, { rejectWithValue }) => {
         const { id, ...rest } = newTransaction;
         try {
             const { data } = await client.post(TRANSACTIONS_URL, rest);
->>>>>>> 73585f6d0cc6907e5cc00a6d038d18f62c7a7758
             return data;
         } catch (error) {
             console.log(error);
