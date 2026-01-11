@@ -28,7 +28,9 @@ export const QUERIES = Object.freeze({
                             WHERE id = $1 and user_id = $2
                             RETURNING *
                             `,
-    SELECT_BALANCE_BY_USER_ID: `select (sum(tri.amount)::numeric(24, 8) - sum(tro.amount)::numeric(24, 8)) as amount
+    DELETE_TRANSACTIONS_BY_CATEGORY_ID: `DELETE from transactions
+                                         WHERE category_id = $1 and user_id = $2`,
+    SELECT_BALANCE_BY_USER_ID: `select (COALESCE(sum(tri.amount), 0)::numeric(24, 8) - COALESCE(sum(tro.amount), 0)::numeric(24, 8)) as amount
                                 from categories c
                                          left outer join transactions tri on tri.category_id = c.id and c.category_type_id = '00000001-0000-0000-0000-000000000001'
                                          left outer join transactions tro on tro.category_id = c.id and c.category_type_id = '00000001-0000-0000-0000-000000000002'
@@ -38,7 +40,6 @@ export const QUERIES = Object.freeze({
                                          c.category_type_id,
                                          c.name,
                                          t."when",
-                                         t.description,
                                          t.amount
                                      from categories c
                                               inner join transactions t on t.category_id = c.id
@@ -75,8 +76,7 @@ export const QUERIES = Object.freeze({
                                 WITH updated_row AS (
                                 UPDATE transactions
                                 SET "when"      = $3,
-                                    amount      = $4,
-                                    description = $5
+                                    amount      = $4
                                 WHERE id = $1 AND user_id = $2
                                     RETURNING *
                             )
@@ -96,7 +96,6 @@ export const QUERIES = Object.freeze({
                             t.category_id,
                             t."when",
                             t.amount,
-                            t.description,
                             c.category_type_id
                         FROM transactions t
                                  JOIN categories c ON t.category_id = c.id
@@ -104,8 +103,8 @@ export const QUERIES = Object.freeze({
                         `,
     APPEND_TRANSACTION: `
                         WITH inserted_row AS (
-                        INSERT INTO transactions (user_id, category_id, "when", amount, description)
-                        VALUES ($1, $2, $3, $4, $5)
+                        INSERT INTO transactions (user_id, category_id, "when", amount)
+                        VALUES ($1, $2, $3, $4)
                             RETURNING *
                             )
                         SELECT

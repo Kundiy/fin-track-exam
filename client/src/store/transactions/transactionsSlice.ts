@@ -5,7 +5,9 @@ import type {
     Transaction,
     TransactionsInitialState
 } from "../../types";
+import { getBalanceByCategoryType, getBalanceByUser } from "../balance/balanceSlice";
 import axios from "axios";
+import { EXPENSE_CATEGORY_ID, INCOME_CATEGORY_ID } from "../../constants/categoryTypes";
 
 const initialState: TransactionsInitialState = {
     transactions: [],
@@ -67,10 +69,13 @@ export const createTransaction = createAsyncThunk<Transaction, RequestAddTransac
 
 export const updateTransaction = createAsyncThunk<Transaction, Transaction, { rejectValue: string }>(
     'transactions/updateTransaction',
-    async (updatedTransaction: Transaction, { rejectWithValue }) => {
+    async (updatedTransaction: Transaction, { rejectWithValue, dispatch }) => {
         try {
             const transactionId = updatedTransaction.id;
             const { data } = await client.put(`${TRANSACTIONS_URL}/${transactionId}`, updatedTransaction);
+            dispatch(getBalanceByUser());
+            dispatch(getBalanceByCategoryType(INCOME_CATEGORY_ID));
+            dispatch(getBalanceByCategoryType(EXPENSE_CATEGORY_ID));
             return data;
         } catch (error) {
             console.log(error);
@@ -81,9 +86,12 @@ export const updateTransaction = createAsyncThunk<Transaction, Transaction, { re
 
 export const deleteTransaction = createAsyncThunk(
     'transactions/deleteTransaction',
-    async (transactionId: string, { rejectWithValue }) => {
+    async (transactionId: string, { rejectWithValue, dispatch }) => {
         try {
             const { data } = await client.delete(`${TRANSACTIONS_URL}/${transactionId}`);
+            dispatch(getBalanceByUser());
+            dispatch(getBalanceByCategoryType(INCOME_CATEGORY_ID));
+            dispatch(getBalanceByCategoryType(EXPENSE_CATEGORY_ID));
             return data;
         } catch (error) {
             console.log(error);

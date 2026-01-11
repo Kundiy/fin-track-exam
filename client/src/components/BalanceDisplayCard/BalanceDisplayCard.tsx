@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import type { ReactNode } from 'react';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -15,18 +16,26 @@ const Item = styled(Paper)(({ theme }) => ({
         backgroundColor: '#1A2027',
     }),
     boxShadow: 'none',
-    fontSize: 20,
 }));
 
-type BalanceCardProps = {
+type BalanceDisplayCardProps = {
     icon: ReactNode;
     title: string;
-    balance: string;
-}
+    value: string | number;
+    displayColor?: string;
+    prefix?: string;
+    suffix?: string;
+};
 
-export default function BalanceCard({ icon, title, balance }: BalanceCardProps) {
-    const isExpense = title.toLowerCase().includes('expense');
-    const displayColor = isExpense ? '#f44336' : '#4CAF50';
+export default function BalanceDisplayCard({
+    icon,
+    title,
+    value,
+    displayColor = '#4CAF50',
+    prefix = '$',
+    suffix = ''
+}: BalanceDisplayCardProps) {
+    const formattedValue = Number(value).toFixed(2);
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -43,14 +52,19 @@ export default function BalanceCard({ icon, title, balance }: BalanceCardProps) 
                     </Item>
                 </Grid>
                 <Grid size={8}>
-                    <Stack >
-                        <Item>{title}</Item>
-                        <Item sx={{ fontSize: '30px', fontWeight: 'bold', color: displayColor, }}>
-                            {Number(balance).toFixed(2)}
+                    <Stack>
+                        <Item>
+                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                {title}
+                            </Typography>
+                        </Item>
+                        <Item sx={{ fontSize: '24px', fontWeight: 'bold', color: displayColor }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'inherit' }}>
+                                {prefix}{formattedValue}{suffix}
+                            </Typography>
                         </Item>
                     </Stack>
                 </Grid>
-
             </Grid>
         </Box>
     );
