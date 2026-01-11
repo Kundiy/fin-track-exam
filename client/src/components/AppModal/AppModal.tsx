@@ -16,8 +16,6 @@ const MODAL_COMPONENTS: Record<string, React.FC<any>> = {
     'EDIT_CATEGORY': AddCategoryForm,
     'ADD_TRANSACTION': TransactionForm,
     'EDIT_TRANSACTION': TransactionForm,
-    'ADD_GOAL': AddGoalForm,
-    'EDIT_GOAL': AddGoalForm,
 };
 
 const AppModal = () => {

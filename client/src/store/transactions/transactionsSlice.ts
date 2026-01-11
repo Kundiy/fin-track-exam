@@ -55,12 +55,19 @@ export const getTransactionById = createAsyncThunk(
 
 export const createTransaction = createAsyncThunk<Transaction, RequestAddTransaction, { rejectValue: string }>(
     'transactions/createTransaction',
+<<<<<<< HEAD
     async (newTransaction: RequestAddTransaction, { rejectWithValue, dispatch }) => {
         try {
             const { data } = await client.post(TRANSACTIONS_URL, newTransaction);
             dispatch(getBalanceByUser());
             dispatch(getBalanceByCategoryType(INCOME_CATEGORY_ID));
             dispatch(getBalanceByCategoryType(EXPENSE_CATEGORY_ID));
+=======
+    async (newTransaction: RequestAddTransaction, { rejectWithValue }) => {
+        const { id, ...rest } = newTransaction;
+        try {
+            const { data } = await client.post(TRANSACTIONS_URL, rest);
+>>>>>>> 73585f6d0cc6907e5cc00a6d038d18f62c7a7758
             return data;
         } catch (error) {
             console.log(error);
@@ -113,7 +120,7 @@ export const transactionsSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getTransactionsByUser.fulfilled, (state, action) => {
-                state.transactions = action.payload.map((transaction: any) => {
+                state.transactions = action.payload.map((transaction: Transaction) => {
                     const { category_type_id: categoryTypeId, when, ...rest } = transaction;
                     const correctDate = moment(when).format('YYYY-MM-DD');
 
@@ -131,7 +138,7 @@ export const transactionsSlice = createSlice({
 
         builder
             .addCase(createTransaction.fulfilled, (state, action) => {
-                const { when, category_type_id: categoryTypeId, ...rest } = action.payload as any;
+                const { when, category_type_id: categoryTypeId, ...rest } = action.payload;
                 const correctDate = moment(when).format('YYYY-MM-DD');
                 const finalTransaction = {
                     ...rest,
@@ -147,7 +154,7 @@ export const transactionsSlice = createSlice({
 
         builder
             .addCase(updateTransaction.fulfilled, (state, action) => {
-                const { when, category_type_id: categoryTypeId, ...rest } = action.payload as any;
+                const { when, category_type_id: categoryTypeId, ...rest } = action.payload;
                 const correctDate = moment(when).format('YYYY-MM-DD');
                 const finalTransaction = {
                     ...rest,

@@ -53,6 +53,3 @@ Desktop.ini
 client/lint_report.json
 client/features_lint.json
 server/scripts/check_email.ts
-verify_api.js
-verify_goals.ts
-client/*.txt

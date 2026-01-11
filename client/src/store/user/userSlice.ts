@@ -111,6 +111,6 @@ export const userSlice = createSlice({
 
 
 
-export const { loginSuccessMock, logout, clearRegistrationError, clearLoginError, setAuthToken } = userSlice.actions;
+export const { loginSuccessMock, logout, clearRegistrationError, setAuthToken } = userSlice.actions;
 
 export default userSlice.reducer;
